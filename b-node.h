@@ -1,8 +1,11 @@
 class B_Node {
     public: 
-        B_Node();
-        B_Node(int num);
+        B_Node(int num, bool leaf);
         void addValue(int num);
+        void set_l(B_Node *node);
+        void set_ml(B_Node *node);
+        void set_mr(B_Node *node);
+        void set_r(B_Node *node);
     private: 
         int value_l;
         int value_m;
