@@ -19,6 +19,6 @@ class B_Node {
         B_Node *ptr_mr;
         B_Node *ptr_r;
         bool isLeaf;
-        User top_leaf;
-        User bottom_leaf;
+        User *top_leaf;
+        User *bottom_leaf;
 };

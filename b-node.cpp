@@ -14,9 +14,9 @@ B_Node::B_Node(int num) {
 B_Node::B_Node(User &user, bool isTop) {
     this->isLeaf = true;
     if(isTop) {
-        this->top_leaf = user;
+        this->top_leaf = &user;
     } else {
-        this->bottom_leaf = user;
+        this->bottom_leaf = &user;
     }
 }
 
