@@ -4,7 +4,7 @@ class B_Node {
     public: 
         B_Node();
         B_Node(int num);
-        B_Node(User &user, bool isTop);
+        B_Node(User *user, bool isTop);
         void addValue(int num);
         void set_l(B_Node *node);
         void set_ml(B_Node *node);

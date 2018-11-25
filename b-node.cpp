@@ -11,12 +11,12 @@ B_Node::B_Node(int num) {
     this->value_r = -1;
 }
 
-B_Node::B_Node(User &user, bool isTop) {
+B_Node::B_Node(User *user, bool isTop) {
     this->isLeaf = true;
     if(isTop) {
-        this->top_leaf = &user;
+        this->top_leaf = user;
     } else {
-        this->bottom_leaf = &user;
+        this->bottom_leaf = user;
     }
 }
 
