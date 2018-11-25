@@ -11,3 +11,7 @@ User::User(int perm_number, std::string name, std::string genre1, std::string ge
     this->genre2 = genre2;
 }
 
+int User::getPerm() {
+    return this-> perm_number;
+}
+
