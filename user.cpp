@@ -1,10 +1,7 @@
 #include "user.h"
 
 User::User() {
-    this->perm_number = -1;
-    this->name = "";
-    this->genre1 = "";
-    this->genre2 = "";
+    //Default Construtor
 }
 
 User::User(int perm_number, std::string name, std::string genre1, std::string genre2) {
