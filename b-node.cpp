@@ -35,3 +35,7 @@ void B_Node::set_mr(B_Node *node) {
 void B_Node::set_r(B_Node *node) {
     this->ptr_mr = node;
 }
+
+bool B_Node::checkLeaf() {
+    return this->isLeaf;
+}
