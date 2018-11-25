@@ -1,3 +1,6 @@
+#ifndef _B_NODE_H_
+#define _B_NODE_H_
+
 #include "user.h"
 
 class B_Node {
@@ -23,3 +26,5 @@ class B_Node {
         User *top_leaf;
         User *bottom_leaf;
 };
+
+#endif

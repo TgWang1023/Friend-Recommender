@@ -1,3 +1,6 @@
+#ifndef _USER_H_
+#define _USER_H_
+
 #include <string>
 
 class User {
@@ -11,3 +14,5 @@ class User {
         std::string genre1;
         std::string genre2;
 };
+
+#endif

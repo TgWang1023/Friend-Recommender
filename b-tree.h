@@ -1,3 +1,6 @@
+#ifndef _B_TREE_H_
+#define _B_TREE_H_
+
 #include "b-node.h"
 
 class B_Tree {
@@ -9,3 +12,5 @@ class B_Tree {
     private: 
         B_Node *root;
 };
+
+#endif
