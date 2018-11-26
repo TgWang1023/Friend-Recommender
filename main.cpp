@@ -7,6 +7,7 @@ using namespace std;
 
 int main() {
     fstream word_file;
+    B_Tree tree;
     cout << "\n\n\nFriend Recommender" << endl;
     cout << "Please select the action you would like to perform:" << endl;
 
@@ -40,7 +41,20 @@ int main() {
                 break;
             }
             case '2': {
-                cout << "case 2" << endl;
+                int perm_input;
+                string name_input;
+                string genre1_input;
+                string genre2_input;
+                cout << "Please enter the user's perm number" << endl;
+                cin >> perm_input;
+                cout << "Please enter the user's name" << endl;
+                cin >> name_input;
+                cout << "Please enter the user's first favourite movie genre" << endl;
+                cin >> genre1_input;
+                cout << "Please enter the user's second favourite movie genre" << endl;
+                cin >> genre2_input;
+
+                cout << "User added successfully." << endl;
                 break;
             }
             case '3': {
