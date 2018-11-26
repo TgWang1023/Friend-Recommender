@@ -13,6 +13,9 @@ class B_Node {
         void set_ml(B_Node *node);
         void set_mr(B_Node *node);
         void set_r(B_Node *node);
+        int get_l();
+        int get_m();
+        int get_r();
         bool checkLeaf();
     private: 
         int value_l;

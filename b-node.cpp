@@ -36,6 +36,18 @@ void B_Node::set_r(B_Node *node) {
     this->ptr_mr = node;
 }
 
+int B_Node::get_l() {
+    return this->value_l;
+}
+
+int B_Node::get_m() {
+    return this->value_m;
+}
+
+int B_Node::get_r() {
+    return this->value_r;
+}
+
 bool B_Node::checkLeaf() {
     return this->isLeaf;
 }
