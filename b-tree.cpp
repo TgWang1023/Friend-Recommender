@@ -44,6 +44,11 @@ void B_Tree::addUser(User *user) {
 }
 
 void B_Tree::findUser(int perm) {
+    // Empty tree case
+    if(this->root == NULL) {
+        std::cout << "No user with the perm number " << perm << " was found." << std::endl;
+        return;
+    }
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
     while(runner->isLeaf != true) {
@@ -66,6 +71,11 @@ void B_Tree::findUser(int perm) {
 }
 
 int B_Tree::findUserDetail(int perm) {
+    // Empty tree case
+    if(this->root == NULL) {
+        std::cout << "No user with the perm number " << perm << " was found." << std::endl;
+        return -1;
+    }
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
     while(runner->isLeaf != true) {
