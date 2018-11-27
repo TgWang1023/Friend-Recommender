@@ -10,6 +10,20 @@ void B_Tree::addUser(User *user) {
         this->root = new B_Node(user->getPerm());
         this->root->ptr_ml = new B_Node(user, true);
     }
+    // Traverse to the leaf based on the user's perm number
+    int goal = user->getPerm();
+    B_Node *runner = this->root;
+    while(runner->isLeaf != true) {
+        if(goal < runner->value_l) {
+            runner = runner->ptr_l;
+        } else if(goal < runner->value_m) {
+            runner = runner->ptr_ml;
+        } else if(goal < runner->value_r) {
+            runner = runner->ptr_mr;
+        } else {
+            runner = runner->ptr_r;
+        }
+    }
     // If the leaf has a spot for the new user to the inserted
 }
 
