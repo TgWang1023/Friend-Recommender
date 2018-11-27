@@ -40,7 +40,8 @@ void B_Tree::addUser(User *user) {
         }
     }
     // If the leaf doesn't have a spot, but the node before leaf has an available spot
-
+    /* NEXT STEP: Currently B-Tree only supports inserting 1 node. 
+    Get to the point where you can fill up an entire internal node. */
 }
 
 void B_Tree::findUser(int perm) {
