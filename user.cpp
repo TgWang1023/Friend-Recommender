@@ -1,7 +1,7 @@
 #include "user.h"
 
 User::User() {
-    //Default Construtor
+    // Default Construtor
 }
 
 User::User(int perm_number, std::string name, std::string genre1, std::string genre2) {

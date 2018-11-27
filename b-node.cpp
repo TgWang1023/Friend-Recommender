@@ -1,7 +1,7 @@
 #include "b-node.h"
 
 B_Node::B_Node() {
-    //Default Constructor
+    // Default Constructor
 }
 
 B_Node::B_Node(int num) {
