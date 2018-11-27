@@ -22,6 +22,7 @@ int main() {
         cout << "Choice: ";
         char choice;
         cin >> choice;
+        cin.ignore();
         cout << "-------------------------" << endl;
 
         switch(choice) {
@@ -29,7 +30,6 @@ int main() {
                 word_file.close();
                 cout << "Please enter the name of the file: ";
                 string filename;
-                cin.ignore();
                 getline(cin, filename);
                 word_file.open(filename);
                 if (word_file.is_open()) {
@@ -47,17 +47,17 @@ int main() {
                 string genre2_input;
                 // Getting user input
                 cout << "Please enter the user's perm number: ";
-                cin.ignore();
                 getline(cin, perm_input);
+                cout << perm_input << endl;
                 cout << "Please enter the user's name: ";
-                cin.ignore();
                 getline(cin, name_input);
+                cout << name_input << endl;
                 cout << "Please enter the user's first favourite movie genre: ";
-                cin.ignore();
                 getline(cin, genre1_input);
+                cout << genre1_input << endl;
                 cout << "Please enter the user's second favourite movie genre: ";
-                cin.ignore();
                 getline(cin, genre2_input);
+                cout << genre2_input << endl;
                 // Adding the new user to the tree
                 try {
                     User *new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
@@ -75,7 +75,6 @@ int main() {
                 string perm_input;
                 // Getting user input
                 cout << "Please enter the user's perm number: ";
-                cin.ignore();
                 getline(cin, perm_input);
                 try {
                     tree.findUser(stoi(perm_input));
@@ -91,7 +90,6 @@ int main() {
                 string perm_input;
                 // Getting user input
                 cout << "Please enter the user's perm number: ";
-                cin.ignore();
                 getline(cin, perm_input);
                 try {
                     tree.findUserDetail(stoi(perm_input));
