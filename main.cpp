@@ -41,20 +41,30 @@ int main() {
                 break;
             }
             case '2': {
-                int perm_input;
+                // Entered Attributes
+                string perm_input;
                 string name_input;
                 string genre1_input;
                 string genre2_input;
-                cout << "Please enter the user's perm number" << endl;
-                cin >> perm_input;
-                cout << "Please enter the user's name" << endl;
-                cin >> name_input;
-                cout << "Please enter the user's first favourite movie genre" << endl;
-                cin >> genre1_input;
-                cout << "Please enter the user's second favourite movie genre" << endl;
-                cin >> genre2_input;
-
-                cout << "User added successfully." << endl;
+                // Getting user input
+                cout << "Please enter the user's perm number: ";
+                getline(cin, perm_input);
+                cout << "Please enter the user's name: ";
+                getline(cin, name_input);
+                cout << "Please enter the user's first favourite movie genre: ";
+                getline(cin, genre1_input);
+                cout << "Please enter the user's second favourite movie genre: ";
+                getline(cin, genre2_input);
+                // Adding the new user to the tree
+                try {
+                    User *new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
+                    tree.addUser(new_user);
+                    cout << "User added successfully." << endl;
+                } catch(invalid_argument i) {
+                    cout << "Failed to add user. Invalid perm number." << endl;
+                } catch(out_of_range o) {
+                    cout << "Failed to add user. Perm number too large." << endl;
+                }
                 break;
             }
             case '3': {

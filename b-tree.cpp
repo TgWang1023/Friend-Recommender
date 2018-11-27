@@ -8,7 +8,7 @@ void B_Tree::addUser(User *user) {
     // Root is Null
     if(this->root == NULL) {
         this->root = new B_Node(user->getPerm());
-        this->root->top_leaf = user;
+        this->root->ptr_ml = new B_Node(user, true);
     }
     // Traverse to the leaf based on the user's perm number
     int goal = user->getPerm();
@@ -25,6 +25,16 @@ void B_Tree::addUser(User *user) {
         }
     }
     // If the leaf has a spot for the new user to the inserted
+    if(runner->bottom_leaf == NULL) {
+        if(runner->top_leaf->getPerm() > goal) {
+            runner->bottom_leaf = runner->top_leaf;
+            runner->top_leaf = user;
+        } else {
+            runner->bottom_leaf = user;
+        }
+    }
+    // If the leaf doesn't have a spot, but the node before leaf has an available spot
+    
 }
 
 bool B_Tree::findUser(int perm) {
