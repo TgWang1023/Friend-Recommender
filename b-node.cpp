@@ -4,6 +4,10 @@ B_Node::B_Node() {
     // Default Constructor
 }
 
+B_Node::~B_Node() {
+    // Destructor
+}
+
 B_Node::B_Node(int num) {
     this->isLeaf = false;
     this->value_l = num;

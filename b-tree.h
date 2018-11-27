@@ -6,6 +6,7 @@
 class B_Tree {
     public: 
         B_Tree();
+        ~B_Tree();
         void addUser(User *user);
         void findUser(int perm);
         int findUserDetail(int perm);

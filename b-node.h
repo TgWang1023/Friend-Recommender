@@ -6,6 +6,7 @@
 struct B_Node {
     // Constructors
     B_Node();
+    ~B_Node();
     B_Node(int num);
     B_Node(User *user, bool isTop);
     // Attributes

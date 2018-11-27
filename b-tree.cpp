@@ -5,11 +5,16 @@ B_Tree::B_Tree() {
     this->root = NULL;
 }
 
+B_Tree::~B_Tree() {
+    // Destructor
+}
+
 void B_Tree::addUser(User *user) {
     // Root is Null
     if(this->root == NULL) {
         this->root = new B_Node(user->getPerm());
         this->root->ptr_ml = new B_Node(user, true);
+        return;
     }
     // Traverse to the leaf based on the user's perm number
     int goal = user->getPerm();
