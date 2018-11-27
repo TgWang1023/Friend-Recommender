@@ -9,8 +9,9 @@ struct B_Node {
     ~B_Node();
     B_Node(int num);
     B_Node(User *user, bool isTop);
-    // Attributes
+    // Methods
     void addValue(int num);
+    // Attributes
     int value_l;
     int value_m;
     int value_r;

@@ -61,9 +61,9 @@ void B_Tree::findUser(int perm) {
         } else {
             runner = runner->ptr_r;
         }
+        std::cout << runner << std::endl;
     }
     // Return true if the perm matches one of the leaves, false otherwise
-    std::cout << "came here" << std::endl;
     if(runner == NULL || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf == NULL) || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf->getPerm() != perm)) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
     } else {
