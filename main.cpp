@@ -48,26 +48,31 @@ int main() {
                 // Getting user input
                 cout << "Please enter the user's perm number: ";
                 getline(cin, perm_input);
-                cout << perm_input << endl;
-                cout << "Please enter the user's name: ";
-                getline(cin, name_input);
-                cout << name_input << endl;
-                cout << "Please enter the user's first favourite movie genre: ";
-                getline(cin, genre1_input);
-                cout << genre1_input << endl;
-                cout << "Please enter the user's second favourite movie genre: ";
-                getline(cin, genre2_input);
-                cout << genre2_input << endl;
-                // Adding the new user to the tree
                 try {
-                    User *new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
-                    tree.addUser(new_user);
-                    cout << "User added successfully." << endl;
+                    int temp = stoi(perm_input);
+                    if(stoi(perm_input) < 0) {
+                        throw 99;
+                    }
                 } catch(invalid_argument i) {
                     cout << "ERROR: Failed to add user. Invalid perm number." << endl;
+                    break;
                 } catch(out_of_range o) {
                     cout << "ERROR: Failed to add user. Perm number too large." << endl;
+                    break;
+                } catch(int e) {
+                    cout << "ERROR: Failed to add user. Perm number cannot be negative." << endl;
+                    break;
                 }
+                cout << "Please enter the user's name: ";
+                getline(cin, name_input);
+                cout << "Please enter the user's first favourite movie genre: ";
+                getline(cin, genre1_input);
+                cout << "Please enter the user's second favourite movie genre: ";
+                getline(cin, genre2_input);
+                // Adding the new user to the tree
+                User *new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
+                tree.addUser(new_user);
+                cout << "User added successfully." << endl;
                 break;
             }
             case '3': {
