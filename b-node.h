@@ -8,7 +8,7 @@ struct B_Node {
     B_Node();
     ~B_Node();
     B_Node(int num);
-    B_Node(User *user, bool isTop);
+    B_Node(User *user);
     // Methods
     void addValue(int num);
     // Attributes
