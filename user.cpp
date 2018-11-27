@@ -12,6 +12,18 @@ User::User(int perm_number, std::string name, std::string genre1, std::string ge
 }
 
 int User::getPerm() {
-    return this-> perm_number;
+    return this->perm_number;
+}
+
+std::string User::getName() {
+    return this->name;
+}
+
+std::string User::getGenre1() {
+    return this->genre1;
+}
+
+std::string User::getGenre2() {
+    return this->genre2;
 }
 
