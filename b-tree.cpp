@@ -51,22 +51,22 @@ void B_Tree::findUser(int perm) {
     }
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
-    while(runner->isLeaf != true) {
+    while(runner != NULL && runner->isLeaf != true) {
         if(perm < runner->value_l) {
             runner = runner->ptr_l;
-        } else if(perm < runner->value_m) {
+        } else if(runner->value_m == -1 || perm < runner->value_m) {
             runner = runner->ptr_ml;
-        } else if(perm < runner->value_r) {
+        } else if(runner->value_r == -1 || perm < runner->value_r) {
             runner = runner->ptr_mr;
         } else {
             runner = runner->ptr_r;
         }
     }
     // Return true if the perm matches one of the leaves, false otherwise
-    if(runner->top_leaf->getPerm() == perm || runner->bottom_leaf->getPerm() == perm) {
-        std::cout << "User with the perm number " << perm << " was found." << std::endl;
-    } else {
+    if(runner == NULL || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf == NULL) || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf->getPerm() != perm)) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
+    } else {
+        std::cout << "User with the perm number " << perm << " was found." << std::endl;
     }
 }
 
@@ -78,18 +78,22 @@ int B_Tree::findUserDetail(int perm) {
     }
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
-    while(runner->isLeaf != true) {
+    while(runner != NULL && runner->isLeaf != true) {
         if(perm < runner->value_l) {
             runner = runner->ptr_l;
-        } else if(perm < runner->value_m) {
+        } else if(runner->value_m == -1 || perm < runner->value_m) {
             runner = runner->ptr_ml;
-        } else if(perm < runner->value_r) {
+        } else if(runner->value_r == -1 || perm < runner->value_r) {
             runner = runner->ptr_mr;
         } else {
             runner = runner->ptr_r;
         }
     }
-    if(runner->top_leaf != NULL && runner->top_leaf->getPerm() == perm) {
+    // Return the graph index if found, -1 otherwise
+    if(runner == NULL || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf == NULL)) {
+        std::cout << "No user with the perm number " << perm << " was found." << std::endl;
+        return -1;
+    } else if(runner->top_leaf != NULL && runner->top_leaf->getPerm() == perm) {
         std::cout << "User's perm number: " << runner->top_leaf->getPerm() << std::endl;
         std::cout << "User's name: " << runner->top_leaf->getName() << std::endl;
         std::cout << "User's first favourite genre: " << runner->top_leaf->getGenre1() << std::endl;
