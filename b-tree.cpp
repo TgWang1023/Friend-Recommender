@@ -45,12 +45,23 @@ void B_Tree::addUser(User *user) {
             } else {
                 runner->leaf_arr[1] = user;
             }
-        } else {
+        } else { // Otherwise either find another leaf with empty spot or make a new leaf, then reorganize
+            bool noEmptySpot = true;
+            for(int idx = 0; idx < 4; idx++) {
+                if(prev_runner->ptr_arr[idx] == NULL) {
+                    noEmptySpot = false;
+                    prev_runner->ptr_arr[idx] = new B_Node(user);
+                    break;
+                } else if (prev_runner->ptr_arr[idx]->leaf_arr[1] == NULL) {
 
+                }
+            }
+            // If all 8 spots are completely filled, split the node recursively
+            if(noEmptySpot) {
+                /* NEXT STEP: Currently B-Tree only supports inserting 8 leaf values. 
+                Get the recursive split case to work for all situations. */
+            }
         }
-        // If the leaf doesn't have a spot, but the node before leaf has an available spot
-        /* NEXT STEP: Currently B-Tree only supports inserting 1 node. 
-        Get to the point where you can fill up an entire internal node. */
     }
 }
 
