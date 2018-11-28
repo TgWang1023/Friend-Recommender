@@ -14,6 +14,7 @@ void B_Tree::addUser(User *user) {
     if(this->root == NULL) {
         this->root = new B_Node(user->getPerm());
         this->root->ptr_arr[1] = new B_Node(user);
+        this->root->parent = this->root;
         return;
     }
     // Traverse to the leaf based on the user's perm number, make a new leaf node if there is no leaf at the to be inserted spot yet
@@ -21,39 +22,30 @@ void B_Tree::addUser(User *user) {
     B_Node *runner = this->root;
     B_Node *prev_runner = runner;
     bool noNewLeaf = true;
-    int runnerIdx;
     while(runner->isLeaf != true) {
         if(goal < runner->value_arr[0]) {
-            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runnerIdx = 0; runner->ptr_arr[0] = new B_Node(user); break; }
-        } else if(runner->value_arr[1] == -1 || goal < runner->value_arr[1]) {
-            if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; } else { noNewLeaf = false; runnerIdx = 1; runner->ptr_arr[1] = new B_Node(user); break; }
-        } else if(runner->value_arr[2] == -1 || goal < runner->value_arr[2]) {
-            if(runner->ptr_arr[2] != NULL) { runner = runner->ptr_arr[2]; } else { noNewLeaf = false; runnerIdx = 2; runner->ptr_arr[2] = new B_Node(user); break; }
+            std::cout << "came to 0" << std::endl;
+            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runner->ptr_arr[0] = new B_Node(user); break; }
+        } else if(runner->value_arr[0] == -1 || goal < runner->value_arr[1]) {
+            std::cout << "came to 1" << std::endl;
+            if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; } else { noNewLeaf = false; runner->parent->value_arr[0] = goal; runner->ptr_arr[1] = new B_Node(user); break; }
+        } else if(runner->value_arr[1] == -1 || goal < runner->value_arr[2]) {
+            std::cout << "came to 2" << std::endl;
+            if(runner->ptr_arr[2] != NULL) { runner = runner->ptr_arr[2]; } else { noNewLeaf = false; runner->parent->value_arr[1] = goal; runner->ptr_arr[2] = new B_Node(user); break; }
         } else {
-            if(runner->ptr_arr[3] != NULL) { runner = runner->ptr_arr[3]; } else { noNewLeaf = false; runnerIdx = 3; runner->ptr_arr[3] = new B_Node(user); break; }
+            std::cout << "came to 3" << std::endl;
+            if(runner->ptr_arr[3] != NULL) { runner = runner->ptr_arr[3]; } else { noNewLeaf = false; runner->parent->value_arr[2] = goal; runner->ptr_arr[3] = new B_Node(user); break; }
         }
         runner->parent = prev_runner;
         if(runner->isLeaf != true) {
             prev_runner = runner;
         }
     }
-    if(runnerIdx > 0) {
-        prev_runner->value_arr[runnerIdx - 1] = goal;
-    }
     // If no new leaf node were created in the traversal process...
     if(noNewLeaf) {
         // If the leaf has a spot for the new user to the inserted
         if(runner->leaf_arr[1] == NULL) {
-            if(runner->leaf_arr[0]->getPerm() > goal) {
-                runner->leaf_arr[1] = runner->leaf_arr[0];
-                runner->leaf_arr[0] = user;
-            } else {
-                runner->leaf_arr[1] = user;
-            }
-            // Setting the internal node value
-            if(runnerIdx < 3) {
-                prev_runner->value_arr[runnerIdx] = runner->leaf_arr[1]->getPerm();
-            }
+            runner->leaf_arr[1] = user;
         } else { // If there are no spots available, check to spot to the right of the node first
             /* NEXT STEP: Currently B-Tree only supports inserting 8 leaf values. 
             Get the recursive split case to work for all situations. */
