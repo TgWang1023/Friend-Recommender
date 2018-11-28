@@ -47,16 +47,25 @@ void B_Tree::addUser(User *user) {
             }
         } else { // Otherwise either find another leaf with empty spot or make a new leaf, then reorganize
             bool noEmptySpot = true;
-            for(int idx = 0; idx < 4; idx++) {
+            for(int idx = 0; idx < 4; idx++) { // Find and insert for loop
                 if(prev_runner->ptr_arr[idx] == NULL) {
                     noEmptySpot = false;
                     prev_runner->ptr_arr[idx] = new B_Node(user);
                     break;
+                } else if (prev_runner->ptr_arr[idx]->leaf_arr[0] == NULL) {
+                    noEmptySpot = false;
+                    prev_runner->ptr_arr[idx]->leaf_arr[0] = user;
+                    break;
                 } else if (prev_runner->ptr_arr[idx]->leaf_arr[1] == NULL) {
-
+                    noEmptySpot = false;
+                    prev_runner->ptr_arr[idx]->leaf_arr[1] = user;
+                    break;
                 }
             }
-            // If all 8 spots are completely filled, split the node recursively
+            for(int idx = 0; idx < 4; idx++) { // Reorganize for loop
+
+            }
+            // If all 8 spots are completely filled, split the node recursively to make room for new leaf.
             if(noEmptySpot) {
                 /* NEXT STEP: Currently B-Tree only supports inserting 8 leaf values. 
                 Get the recursive split case to work for all situations. */
