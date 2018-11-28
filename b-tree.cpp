@@ -47,10 +47,11 @@ void B_Tree::addUser(User *user) {
             }
         } else { // Otherwise either find another leaf with empty spot or make a new leaf, then reorganize
             bool noEmptySpot = true;
-            for(int idx = 0; idx < 4; idx++) { // Find and insert for loop
+            for(int idx = 0; idx < 4; idx++) { // Find and insert
                 if(prev_runner->ptr_arr[idx] == NULL) {
                     noEmptySpot = false;
                     prev_runner->ptr_arr[idx] = new B_Node(user);
+                    if(idx > 1) { prev_runner->value_arr[idx - 1] = goal; }
                     break;
                 } else if (prev_runner->ptr_arr[idx]->leaf_arr[0] == NULL) {
                     noEmptySpot = false;
@@ -62,8 +63,26 @@ void B_Tree::addUser(User *user) {
                     break;
                 }
             }
-            for(int idx = 0; idx < 4; idx++) { // Reorganize for loop
-
+            for(int idx = 0; idx < 4; idx++) { // Reorganize
+                for(int lv = 0; lv < 2; lv++) {
+                    if(lv == 0) { 
+                        User *prev = prev_runner->ptr_arr[idx]->leaf_arr[lv];
+                        User *next = prev_runner->ptr_arr[idx]->leaf_arr[lv + 1];
+                        if(prev->getPerm() > next->getPerm()) {
+                            prev_runner->ptr_arr[idx]->leaf_arr[lv] = prev_runner->ptr_arr[idx]->leaf_arr[lv + 1];
+                            prev_runner->ptr_arr[idx]->leaf_arr[lv + 1] = prev;
+                        }
+                    } else {
+                        if(idx < 4) { // Last element doesn't need to be swapped as the node is already sorted correctly at this point
+                            User *prev = prev_runner->ptr_arr[idx]->leaf_arr[lv];
+                            User *next = prev_runner->ptr_arr[idx + 1]->leaf_arr[lv - 1];
+                            if(prev->getPerm() > next->getPerm()) {
+                                prev_runner->ptr_arr[idx]->leaf_arr[lv] = prev_runner->ptr_arr[idx + 1]->leaf_arr[lv - 1];
+                                prev_runner->ptr_arr[idx + 1]->leaf_arr[lv - 1] = prev;
+                            }
+                        }        
+                    }
+                }
             }
             // If all 8 spots are completely filled, split the node recursively to make room for new leaf.
             if(noEmptySpot) {
