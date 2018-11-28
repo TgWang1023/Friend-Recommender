@@ -13,7 +13,7 @@ void B_Tree::addUser(User *user) {
     // Root is Null
     if(this->root == NULL) {
         this->root = new B_Node(user->getPerm());
-        this->root->ptr_ml = new B_Node(user);
+        this->root->ptr_arr[1] = new B_Node(user);
         return;
     }
     // Traverse to the leaf based on the user's perm number, make a new leaf node if there is no leaf at the to be inserted spot yet
@@ -22,14 +22,14 @@ void B_Tree::addUser(User *user) {
     B_Node *prev_runner = runner;
     bool noNewLeaf = true;
     while(runner->isLeaf != true) {
-        if(goal < runner->value_l) {
-            if(runner->ptr_l != NULL) { runner = runner->ptr_l; } else { noNewLeaf = false; runner->ptr_l = new B_Node(user); break; }
-        } else if(runner->value_m == -1 || goal < runner->value_m) {
-            if(runner->ptr_ml != NULL) { runner = runner->ptr_ml; } else { noNewLeaf = false; runner->ptr_ml = new B_Node(user); break; }
-        } else if(runner->value_r == -1 || goal < runner->value_r) {
-            if(runner->ptr_mr != NULL) { runner = runner->ptr_mr; } else { noNewLeaf = false; runner->ptr_mr = new B_Node(user); break; }
+        if(goal < runner->value_arr[0]) {
+            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runner->ptr_arr[0] = new B_Node(user); break; }
+        } else if(runner->value_arr[1] == -1 || goal < runner->value_arr[1]) {
+            if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; } else { noNewLeaf = false; runner->ptr_arr[1] = new B_Node(user); break; }
+        } else if(runner->value_arr[2] == -1 || goal < runner->value_arr[2]) {
+            if(runner->ptr_arr[2] != NULL) { runner = runner->ptr_arr[2]; } else { noNewLeaf = false; runner->ptr_arr[2] = new B_Node(user); break; }
         } else {
-            if(runner->ptr_r != NULL) { runner = runner->ptr_r; } else { noNewLeaf = false; runner->ptr_r = new B_Node(user); break; }
+            if(runner->ptr_arr[3] != NULL) { runner = runner->ptr_arr[3]; } else { noNewLeaf = false; runner->ptr_arr[3] = new B_Node(user); break; }
         }
         if(runner->isLeaf != true) {
             prev_runner = runner;
@@ -38,15 +38,15 @@ void B_Tree::addUser(User *user) {
     // If no new leaf node were created in the traversal process...
     if(noNewLeaf) {
         // If the leaf has a spot for the new user to the inserted
-        if(runner->bottom_leaf == NULL) {
-            if(runner->top_leaf->getPerm() > goal) {
-                runner->bottom_leaf = runner->top_leaf;
-                runner->top_leaf = user;
+        if(runner->leaf_arr[1] == NULL) {
+            if(runner->leaf_arr[0]->getPerm() > goal) {
+                runner->leaf_arr[1] = runner->leaf_arr[0];
+                runner->leaf_arr[0] = user;
             } else {
-                runner->bottom_leaf = user;
+                runner->leaf_arr[1] = user;
             }
         } else {
-            
+
         }
         // If the leaf doesn't have a spot, but the node before leaf has an available spot
         /* NEXT STEP: Currently B-Tree only supports inserting 1 node. 
@@ -63,18 +63,18 @@ void B_Tree::findUser(int perm) {
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
     while(runner != NULL && runner->isLeaf != true) {
-        if(perm < runner->value_l) {
-            runner = runner->ptr_l;
-        } else if(runner->value_m == -1 || perm < runner->value_m) {
-            runner = runner->ptr_ml;
-        } else if(runner->value_r == -1 || perm < runner->value_r) {
-            runner = runner->ptr_mr;
+        if(perm < runner->value_arr[0]) {
+            runner = runner->ptr_arr[0];
+        } else if(runner->value_arr[1] == -1 || perm < runner->value_arr[1]) {
+            runner = runner->ptr_arr[1];
+        } else if(runner->value_arr[2] == -1 || perm < runner->value_arr[2]) {
+            runner = runner->ptr_arr[2];
         } else {
-            runner = runner->ptr_r;
+            runner = runner->ptr_arr[3];
         }
     }
     // Return true if the perm matches one of the leaves, false otherwise
-    if(runner == NULL || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf == NULL) || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf->getPerm() != perm)) {
+    if(runner == NULL || (runner->leaf_arr[0]->getPerm() != perm && runner->leaf_arr[1] == NULL) || (runner->leaf_arr[0]->getPerm() != perm && runner->leaf_arr[1]->getPerm() != perm)) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
     } else {
         std::cout << "User with the perm number " << perm << " was found." << std::endl;
@@ -91,31 +91,31 @@ int B_Tree::findUserDetail(int perm) {
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
     while(runner != NULL && runner->isLeaf != true) {
-        if(perm < runner->value_l) {
-            runner = runner->ptr_l;
-        } else if(runner->value_m == -1 || perm < runner->value_m) {
-            runner = runner->ptr_ml;
-        } else if(runner->value_r == -1 || perm < runner->value_r) {
-            runner = runner->ptr_mr;
+        if(perm < runner->value_arr[0]) {
+            runner = runner->ptr_arr[0];
+        } else if(runner->value_arr[1] == -1 || perm < runner->value_arr[1]) {
+            runner = runner->ptr_arr[1];
+        } else if(runner->value_arr[2] == -1 || perm < runner->value_arr[2]) {
+            runner = runner->ptr_arr[2];
         } else {
-            runner = runner->ptr_r;
+            runner = runner->ptr_arr[3];
         }
     }
     // Return the graph index if found, -1 otherwise
-    if(runner == NULL || (runner->top_leaf->getPerm() != perm && runner->bottom_leaf == NULL)) {
+    if(runner == NULL || (runner->leaf_arr[0]->getPerm() != perm && runner->leaf_arr[1] == NULL)) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
         return -1;
-    } else if(runner->top_leaf != NULL && runner->top_leaf->getPerm() == perm) {
-        std::cout << "User's perm number: " << runner->top_leaf->getPerm() << std::endl;
-        std::cout << "User's name: " << runner->top_leaf->getName() << std::endl;
-        std::cout << "User's first favourite genre: " << runner->top_leaf->getGenre1() << std::endl;
-        std::cout << "User's second favourite genre: " << runner->top_leaf->getGenre2() << std::endl;
+    } else if(runner->leaf_arr[0] != NULL && runner->leaf_arr[0]->getPerm() == perm) {
+        std::cout << "User's perm number: " << runner->leaf_arr[0]->getPerm() << std::endl;
+        std::cout << "User's name: " << runner->leaf_arr[0]->getName() << std::endl;
+        std::cout << "User's first favourite genre: " << runner->leaf_arr[0]->getGenre1() << std::endl;
+        std::cout << "User's second favourite genre: " << runner->leaf_arr[0]->getGenre2() << std::endl;
         return 9999; // STUB!!!!!!!!!!! Change to Graph Index once implemented
-    } else if(runner->bottom_leaf != NULL && runner->bottom_leaf->getPerm() == perm) {
-        std::cout << "User's perm number: " << runner->bottom_leaf->getPerm() << std::endl;
-        std::cout << "User's name: " << runner->bottom_leaf->getName() << std::endl;
-        std::cout << "User's first favourite genre: " << runner->bottom_leaf->getGenre1() << std::endl;
-        std::cout << "User's second favourite genre: " << runner->bottom_leaf->getGenre2() << std::endl;
+    } else if(runner->leaf_arr[1] != NULL && runner->leaf_arr[1]->getPerm() == perm) {
+        std::cout << "User's perm number: " << runner->leaf_arr[1]->getPerm() << std::endl;
+        std::cout << "User's name: " << runner->leaf_arr[1]->getName() << std::endl;
+        std::cout << "User's first favourite genre: " << runner->leaf_arr[1]->getGenre1() << std::endl;
+        std::cout << "User's second favourite genre: " << runner->leaf_arr[1]->getGenre2() << std::endl;
         return 9999; // STUB!!!!!!!!!!! Change to Graph Index once implemented
     } else {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;

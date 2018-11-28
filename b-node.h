@@ -12,18 +12,10 @@ struct B_Node {
     // Methods
     void addValue(int num);
     // Attributes
-    int value_l;
-    int value_m;
-    int value_r;
     int value_arr[3];
     B_Node *ptr_arr[4];
-    B_Node *ptr_l;
-    B_Node *ptr_ml;
-    B_Node *ptr_mr;
-    B_Node *ptr_r;
     bool isLeaf;
-    User *top_leaf;
-    User *bottom_leaf;
+    User *leaf_arr[2];
 };
 
 #endif
