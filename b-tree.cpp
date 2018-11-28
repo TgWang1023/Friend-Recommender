@@ -21,19 +21,24 @@ void B_Tree::addUser(User *user) {
     B_Node *runner = this->root;
     B_Node *prev_runner = runner;
     bool noNewLeaf = true;
+    int runnerIdx;
     while(runner->isLeaf != true) {
         if(goal < runner->value_arr[0]) {
-            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runner->ptr_arr[0] = new B_Node(user); break; }
+            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runnerIdx = 0; runner->ptr_arr[0] = new B_Node(user); break; }
         } else if(runner->value_arr[1] == -1 || goal < runner->value_arr[1]) {
-            if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; } else { noNewLeaf = false; runner->ptr_arr[1] = new B_Node(user); break; }
+            if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; } else { noNewLeaf = false; runnerIdx = 1; runner->ptr_arr[1] = new B_Node(user); break; }
         } else if(runner->value_arr[2] == -1 || goal < runner->value_arr[2]) {
-            if(runner->ptr_arr[2] != NULL) { runner = runner->ptr_arr[2]; } else { noNewLeaf = false; runner->ptr_arr[2] = new B_Node(user); break; }
+            if(runner->ptr_arr[2] != NULL) { runner = runner->ptr_arr[2]; } else { noNewLeaf = false; runnerIdx = 2; runner->ptr_arr[2] = new B_Node(user); break; }
         } else {
-            if(runner->ptr_arr[3] != NULL) { runner = runner->ptr_arr[3]; } else { noNewLeaf = false; runner->ptr_arr[3] = new B_Node(user); break; }
+            if(runner->ptr_arr[3] != NULL) { runner = runner->ptr_arr[3]; } else { noNewLeaf = false; runnerIdx = 3; runner->ptr_arr[3] = new B_Node(user); break; }
         }
+        runner->parent = prev_runner;
         if(runner->isLeaf != true) {
             prev_runner = runner;
         }
+    }
+    if(runnerIdx > 0) {
+        prev_runner->value_arr[runnerIdx - 1] = goal;
     }
     // If no new leaf node were created in the traversal process...
     if(noNewLeaf) {
@@ -45,50 +50,13 @@ void B_Tree::addUser(User *user) {
             } else {
                 runner->leaf_arr[1] = user;
             }
-        } else { // Otherwise either find another leaf with empty spot or make a new leaf, then reorganize
-            bool noEmptySpot = true;
-            for(int idx = 0; idx < 4; idx++) { // Find and insert
-                if(prev_runner->ptr_arr[idx] == NULL) {
-                    noEmptySpot = false;
-                    prev_runner->ptr_arr[idx] = new B_Node(user);
-                    if(idx > 1) { prev_runner->value_arr[idx - 1] = goal; }
-                    break;
-                } else if (prev_runner->ptr_arr[idx]->leaf_arr[0] == NULL) {
-                    noEmptySpot = false;
-                    prev_runner->ptr_arr[idx]->leaf_arr[0] = user;
-                    break;
-                } else if (prev_runner->ptr_arr[idx]->leaf_arr[1] == NULL) {
-                    noEmptySpot = false;
-                    prev_runner->ptr_arr[idx]->leaf_arr[1] = user;
-                    break;
-                }
+            // Setting the internal node value
+            if(runnerIdx < 3) {
+                prev_runner->value_arr[runnerIdx] = runner->leaf_arr[1]->getPerm();
             }
-            for(int idx = 0; idx < 4; idx++) { // Reorganize
-                for(int lv = 0; lv < 2; lv++) {
-                    if(lv == 0) { 
-                        User *prev = prev_runner->ptr_arr[idx]->leaf_arr[lv];
-                        User *next = prev_runner->ptr_arr[idx]->leaf_arr[lv + 1];
-                        if(prev->getPerm() > next->getPerm()) {
-                            prev_runner->ptr_arr[idx]->leaf_arr[lv] = prev_runner->ptr_arr[idx]->leaf_arr[lv + 1];
-                            prev_runner->ptr_arr[idx]->leaf_arr[lv + 1] = prev;
-                        }
-                    } else {
-                        if(idx < 4) { // Last element doesn't need to be swapped as the node is already sorted correctly at this point
-                            User *prev = prev_runner->ptr_arr[idx]->leaf_arr[lv];
-                            User *next = prev_runner->ptr_arr[idx + 1]->leaf_arr[lv - 1];
-                            if(prev->getPerm() > next->getPerm()) {
-                                prev_runner->ptr_arr[idx]->leaf_arr[lv] = prev_runner->ptr_arr[idx + 1]->leaf_arr[lv - 1];
-                                prev_runner->ptr_arr[idx + 1]->leaf_arr[lv - 1] = prev;
-                            }
-                        }        
-                    }
-                }
-            }
-            // If all 8 spots are completely filled, split the node recursively to make room for new leaf.
-            if(noEmptySpot) {
-                /* NEXT STEP: Currently B-Tree only supports inserting 8 leaf values. 
-                Get the recursive split case to work for all situations. */
-            }
+        } else { // If there are no spots available, check to spot to the right of the node first
+            /* NEXT STEP: Currently B-Tree only supports inserting 8 leaf values. 
+            Get the recursive split case to work for all situations. */
         }
     }
 }

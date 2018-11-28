@@ -13,6 +13,7 @@ B_Node::B_Node(int num) {
     this->value_arr[0] = num;
     this->value_arr[1] = -1;
     this->value_arr[2] = -1;
+    this->parent = NULL;
     this->ptr_arr[0] = NULL;
     this->ptr_arr[1] = NULL;
     this->ptr_arr[2] = NULL;
