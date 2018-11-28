@@ -15,6 +15,8 @@ struct B_Node {
     int value_l;
     int value_m;
     int value_r;
+    int value_arr[3];
+    B_Node *ptr_arr[4];
     B_Node *ptr_l;
     B_Node *ptr_ml;
     B_Node *ptr_mr;

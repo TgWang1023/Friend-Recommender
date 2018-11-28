@@ -19,6 +19,7 @@ void B_Tree::addUser(User *user) {
     // Traverse to the leaf based on the user's perm number, make a new leaf node if there is no leaf at the to be inserted spot yet
     int goal = user->getPerm();
     B_Node *runner = this->root;
+    B_Node *prev_runner = runner;
     bool noNewLeaf = true;
     while(runner->isLeaf != true) {
         if(goal < runner->value_l) {
@@ -29,6 +30,9 @@ void B_Tree::addUser(User *user) {
             if(runner->ptr_mr != NULL) { runner = runner->ptr_mr; } else { noNewLeaf = false; runner->ptr_mr = new B_Node(user); break; }
         } else {
             if(runner->ptr_r != NULL) { runner = runner->ptr_r; } else { noNewLeaf = false; runner->ptr_r = new B_Node(user); break; }
+        }
+        if(runner->isLeaf != true) {
+            prev_runner = runner;
         }
     }
     // If no new leaf node were created in the traversal process...
@@ -41,6 +45,8 @@ void B_Tree::addUser(User *user) {
             } else {
                 runner->bottom_leaf = user;
             }
+        } else {
+            
         }
         // If the leaf doesn't have a spot, but the node before leaf has an available spot
         /* NEXT STEP: Currently B-Tree only supports inserting 1 node. 
