@@ -17,17 +17,18 @@ void B_Tree::addUser(User *user) {
         return;
     } else if(this->root->isLeaf == true) { // Root has one leaf element
         B_Node *new_root = new B_Node(goal);
-        new_root->ptr_arr[1] = new B_Node(user);
-        new_root->ptr_arr[1]->parent = new_root;
         if(this->root->leaf_arr[0]->getPerm() < goal) {
+            new_root->ptr_arr[1] = new B_Node(user);
+            new_root->ptr_arr[1]->parent = new_root;
             new_root->ptr_arr[0] = new B_Node(this->root->leaf_arr[0]);
             new_root->ptr_arr[0]->parent = new_root;
             new_root->value_arr[0] = goal;
         } else {
-            new_root->value_arr[0] = goal;
-            new_root->ptr_arr[2] = new B_Node(this->root->leaf_arr[0]);
-            new_root->ptr_arr[2]->parent = new_root;
-            new_root->value_arr[1] = this->root->leaf_arr[0]->getPerm();
+            new_root->ptr_arr[0] = new B_Node(user);
+            new_root->ptr_arr[0]->parent = new_root;
+            new_root->ptr_arr[1] = new B_Node(this->root->leaf_arr[0]);
+            new_root->ptr_arr[1]->parent = new_root;
+            new_root->value_arr[0] = this->root->leaf_arr[0]->getPerm();
         }
         this->root = new_root;
         return;
