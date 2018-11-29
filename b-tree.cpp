@@ -25,7 +25,7 @@ void B_Tree::addUser(User *user) {
     while(runner->isLeaf != true) {
         if(goal < runner->value_arr[0]) {
             std::cout << "came to 0" << std::endl;
-            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runner->ptr_arr[0] = new B_Node(user); break; }
+            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; if(runner->parent != NULL) { runner->parent->value_arr[0] = goal; } runner->ptr_arr[0] = new B_Node(user); break; }
         } else if(runner->value_arr[0] == -1 || goal < runner->value_arr[1]) {
             std::cout << "came to 1" << std::endl;
             if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; } else { noNewLeaf = false; runner->parent->value_arr[0] = goal; runner->ptr_arr[1] = new B_Node(user); break; }
@@ -46,9 +46,49 @@ void B_Tree::addUser(User *user) {
         // If the leaf has a spot for the new user to the inserted
         if(runner->leaf_arr[1] == NULL) {
             runner->leaf_arr[1] = user;
-        } else { // If there are no spots available, check to spot to the right of the node first
-            /* NEXT STEP: Currently B-Tree only supports inserting 8 leaf values. 
-            Get the recursive split case to work for all situations. */
+        } else { // If there are no spots available, split and insert
+            std::cout << "no spot to insert" << std::endl;
+            B_Node *original = runner->parent;
+            while(runner->parent != NULL) {
+                runner = runner->parent;
+            }
+            // Making new left B Node and right B Node
+            B_Node *new_left = NULL;
+            B_Node *new_right = NULL;
+            if(original->ptr_arr[0] == NULL) { // If the original node is null on left side
+                new_left = new B_Node(original->ptr_arr[1]->leaf_arr[0]->getPerm());
+                new_left->ptr_arr[1] = original->ptr_arr[1];
+                new_right = new B_Node(original->ptr_arr[2]->leaf_arr[0]->getPerm());
+                new_right->ptr_arr[1] = original->ptr_arr[2];
+                new_right->ptr_arr[2] = original->ptr_arr[3];
+                if(new_right->ptr_arr[2] != NULL) {
+                    new_right->value_arr[1] = new_right->ptr_arr[2]->leaf_arr[0]->getPerm();
+                }
+            } else if(original->ptr_arr[2] == NULL) { // If the original node is null on right side
+                new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
+                new_left->ptr_arr[1] = original->ptr_arr[0];
+                new_right = new B_Node(original->ptr_arr[1]->leaf_arr[0]->getPerm());
+                new_right->ptr_arr[1] = original->ptr_arr[1];
+            } else { // If the original node has everything
+                new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
+                new_left->ptr_arr[1] = original->ptr_arr[0];
+                new_left->ptr_arr[2] = original->ptr_arr[1];
+                if(new_left->ptr_arr[2] != NULL) {
+                    new_left->value_arr[1] = new_left->ptr_arr[2]->leaf_arr[0]->getPerm();
+                }
+                new_right = new B_Node(original->ptr_arr[2]->leaf_arr[0]->getPerm());
+                new_right->ptr_arr[1] = original->ptr_arr[2];
+                new_right->ptr_arr[2] = original->ptr_arr[3];
+                if(new_right->ptr_arr[2] != NULL) {
+                    new_right->value_arr[1] = new_right->ptr_arr[2]->leaf_arr[0]->getPerm();
+                }
+            }
+            // Making a new root and call function again to insert the new user
+            B_Node *new_root = new B_Node(original->value_arr[1]);
+            new_root->ptr_arr[0] = new_left;
+            new_root->ptr_arr[1] = new_right;
+            this->root = new_root;
+            addUser(user);
         }
     }
 }
