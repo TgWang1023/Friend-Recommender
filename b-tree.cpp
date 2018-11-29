@@ -19,13 +19,15 @@ void B_Tree::addUser(User *user) {
         B_Node *new_root = new B_Node(goal);
         new_root->ptr_arr[1] = new B_Node(user);
         new_root->ptr_arr[1]->parent = new_root;
-        if(root->leaf_arr[0]->getPerm() < goal) {
-            new_root->ptr_arr[0] = this->root;
+        if(this->root->leaf_arr[0]->getPerm() < goal) {
+            new_root->ptr_arr[0] = new B_Node(this->root->leaf_arr[0]);
             new_root->ptr_arr[0]->parent = new_root;
+            new_root->value_arr[0] = goal;
         } else {
-            new_root->ptr_arr[2] = this->root;
+            new_root->value_arr[0] = goal;
+            new_root->ptr_arr[2] = new B_Node(this->root->leaf_arr[0]);
             new_root->ptr_arr[2]->parent = new_root;
-            new_root->value_arr[1] = goal;
+            new_root->value_arr[1] = this->root->leaf_arr[0]->getPerm();
         }
         this->root = new_root;
         return;
@@ -35,7 +37,7 @@ void B_Tree::addUser(User *user) {
     B_Node *prev_runner = runner;
     bool noNewLeaf = true;
     while(runner->isLeaf != true) {
-        std::cout << "first roadmap: " << runner->value_arr[0] << std::endl;
+        std::cout << "Roadmaps: " << runner->value_arr[0] << ", " << runner->value_arr[1] << ", " << runner->value_arr[2] << std::endl;
         if(goal < runner->value_arr[0]) {
             std::cout << "came to 0" << std::endl;
             if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; } else { noNewLeaf = false; runner->ptr_arr[0] = new B_Node(user); runner->ptr_arr[0]->parent = runner; break; }
@@ -145,8 +147,10 @@ int B_Tree::findUserDetail(int perm) {
     B_Node *runner = this->root;
     while(runner != NULL && runner->isLeaf != true) {
         if(perm < runner->value_arr[0]) {
+            std::cout << "just checking" << std::endl;
             runner = runner->ptr_arr[0];
         } else if(runner->value_arr[1] == -1 || perm < runner->value_arr[1]) {
+            std::cout << "just checking2" << std::endl;
             runner = runner->ptr_arr[1];
         } else if(runner->value_arr[2] == -1 || perm < runner->value_arr[2]) {
             runner = runner->ptr_arr[2];
