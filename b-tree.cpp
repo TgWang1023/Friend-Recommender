@@ -147,10 +147,8 @@ int B_Tree::findUserDetail(int perm) {
     B_Node *runner = this->root;
     while(runner != NULL && runner->isLeaf != true) {
         if(perm < runner->value_arr[0]) {
-            std::cout << "just checking" << std::endl;
             runner = runner->ptr_arr[0];
         } else if(runner->value_arr[1] == -1 || perm < runner->value_arr[1]) {
-            std::cout << "just checking2" << std::endl;
             runner = runner->ptr_arr[1];
         } else if(runner->value_arr[2] == -1 || perm < runner->value_arr[2]) {
             runner = runner->ptr_arr[2];
