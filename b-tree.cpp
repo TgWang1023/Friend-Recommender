@@ -28,6 +28,7 @@ void B_Tree::addUser(User *user) {
             new_root->value_arr[1] = goal;
         }
         this->root = new_root;
+        return;
     }
     // Traverse to the leaf based on the user's perm number, make a new leaf node if there is no leaf at the to be inserted spot yet
     B_Node *runner = this->root;
