@@ -59,8 +59,8 @@ void B_Tree::addUser(User *user) {
     }
     // If no new leaf node were created in the traversal process...
     if(noNewLeaf) {
-        if(runner->leaf_arr[1] == NULL) { // If the leaf has a spot for the new user to the inserted
-            runner->leaf_arr[1] = user;
+        if(runner->leaf_arr[1] == NULL && runner->leaf_arr[0]->getPerm() < goal) { // If the leaf has a spot for the new user to the inserted
+            runner->leaf_arr[1] = user; 
         } else { // If there are no spots available, check if the previous internal node has a open spot.
             bool noOpenSlot = true;
             // Check right side first
@@ -71,6 +71,7 @@ void B_Tree::addUser(User *user) {
                         runner->parent->value_arr[j - 1] = runner->parent->ptr_arr[j]->leaf_arr[0]->getPerm();
                     }
                     runner->parent->ptr_arr[runnerIdx] = new B_Node(user);
+                    runner->parent->ptr_arr[runnerIdx]->parent = runner->parent;
                     if(runnerIdx - 1 >= 0) {
                         runner->parent->value_arr[runnerIdx - 1] = runner->parent->ptr_arr[runnerIdx]->leaf_arr[0]->getPerm();
                     }
@@ -89,6 +90,7 @@ void B_Tree::addUser(User *user) {
                             }   
                         }
                         runner->parent->ptr_arr[runnerIdx] = new B_Node(user);
+                        runner->parent->ptr_arr[runnerIdx]->parent = runner->parent;
                         runner->parent->value_arr[runnerIdx - 1] = runner->parent->ptr_arr[runnerIdx]->leaf_arr[0]->getPerm();
                         noOpenSlot = false;
                         break;
