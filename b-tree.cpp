@@ -42,16 +42,75 @@ void B_Tree::addUser(User *user) {
         std::cout << "Roadmaps: " << runner->value_arr[0] << ", " << runner->value_arr[1] << ", " << runner->value_arr[2] << std::endl;
         if(goal < runner->value_arr[0]) {
             std::cout << "came to 0" << std::endl;
-            if(runner->ptr_arr[0] != NULL) { runner = runner->ptr_arr[0]; runnerIdx = 0; } else { noNewLeaf = false; runner->ptr_arr[0] = new B_Node(user); runner->ptr_arr[0]->parent = runner; break; }
-        } else if(runner->value_arr[0] == -1 || goal < runner->value_arr[1]) {
+            if(runner->ptr_arr[0] != NULL) { 
+                if(runner->ptr_arr[0]->isLeaf == true && runner->ptr_arr[0]->leaf_arr[1] != NULL && runner->ptr_arr[0]->leaf_arr[1]->getPerm() > goal) {
+                    User *temp = runner->ptr_arr[0]->leaf_arr[1];
+                    runner->ptr_arr[0]->leaf_arr[1] = user;
+                    addUser(temp);
+                    return;
+                }
+                runner = runner->ptr_arr[0]; 
+                runnerIdx = 0; 
+            } else { 
+                noNewLeaf = false; 
+                runner->ptr_arr[0] = new B_Node(user); 
+                runner->ptr_arr[0]->parent = runner; 
+                break; 
+            }
+        } else if(runner->value_arr[0] == -1 || goal > runner->value_arr[0]) {
             std::cout << "came to 1" << std::endl;
-            if(runner->ptr_arr[1] != NULL) { runner = runner->ptr_arr[1]; runnerIdx = 1; } else { noNewLeaf = false; prev_runner->value_arr[0] = goal; runner->ptr_arr[1] = new B_Node(user); runner->ptr_arr[1]->parent = runner; break; }
-        } else if(runner->value_arr[1] == -1 || goal < runner->value_arr[2]) {
+            if(runner->ptr_arr[1] != NULL) { 
+                if(runner->ptr_arr[1]->isLeaf == true && runner->ptr_arr[1]->leaf_arr[1] != NULL && runner->ptr_arr[1]->leaf_arr[1]->getPerm() > goal) {
+                    User *temp = runner->ptr_arr[1]->leaf_arr[1];
+                    runner->ptr_arr[1]->leaf_arr[1] = user;
+                    addUser(temp);
+                    return;
+                }
+                runner = runner->ptr_arr[1]; 
+                runnerIdx = 1; 
+            } else { 
+                noNewLeaf = false; 
+                prev_runner->value_arr[0] = goal; 
+                runner->ptr_arr[1] = new B_Node(user); 
+                runner->ptr_arr[1]->parent = runner; 
+                break; 
+            }
+        } else if(runner->value_arr[1] == -1 || goal > runner->value_arr[1]) {
             std::cout << "came to 2" << std::endl;
-            if(runner->ptr_arr[2] != NULL) { runner = runner->ptr_arr[2]; runnerIdx = 2; } else { noNewLeaf = false; prev_runner->value_arr[1] = goal; runner->ptr_arr[2] = new B_Node(user); runner->ptr_arr[2]->parent = runner; break; }
+            if(runner->ptr_arr[2] != NULL) { 
+                if(runner->ptr_arr[2]->isLeaf == true && runner->ptr_arr[2]->leaf_arr[1] != NULL && runner->ptr_arr[2]->leaf_arr[1]->getPerm() > goal) {
+                    User *temp = runner->ptr_arr[2]->leaf_arr[1];
+                    runner->ptr_arr[2]->leaf_arr[1] = user;
+                    addUser(temp);
+                    return;
+                }
+                runner = runner->ptr_arr[2]; 
+                runnerIdx = 2; 
+            } else { 
+                noNewLeaf = false; 
+                prev_runner->value_arr[1] = goal; 
+                runner->ptr_arr[2] = new B_Node(user); 
+                runner->ptr_arr[2]->parent = runner; 
+                break; 
+            }
         } else {
             std::cout << "came to 3" << std::endl;
-            if(runner->ptr_arr[3] != NULL) { runner = runner->ptr_arr[3]; runnerIdx = 3; } else { noNewLeaf = false; prev_runner->value_arr[2] = goal; runner->ptr_arr[3] = new B_Node(user); runner->ptr_arr[3]->parent = runner; break; }
+            if(runner->ptr_arr[3] != NULL) { 
+                if(runner->ptr_arr[3]->isLeaf == true && runner->ptr_arr[3]->leaf_arr[1] != NULL && runner->ptr_arr[3]->leaf_arr[1]->getPerm() > goal) {
+                    User *temp = runner->ptr_arr[3]->leaf_arr[1];
+                    runner->ptr_arr[3]->leaf_arr[1] = user;
+                    addUser(temp);
+                    return;
+                }
+                runner = runner->ptr_arr[3]; 
+                runnerIdx = 3; 
+            } else { 
+                noNewLeaf = false; 
+                prev_runner->value_arr[2] = goal; 
+                runner->ptr_arr[3] = new B_Node(user); 
+                runner->ptr_arr[3]->parent = runner; 
+                break; 
+            }
         }
         if(runner->isLeaf != true) {
             prev_runner = runner;
@@ -108,12 +167,12 @@ void B_Tree::addUser(User *user) {
                 B_Node *new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
                 new_left->ptr_arr[0] = original->ptr_arr[0];
                 new_left->ptr_arr[1] = original->ptr_arr[1];
-                new_left->value_arr[1] = new_left->ptr_arr[1]->leaf_arr[0]->getPerm();
+                new_left->value_arr[0] = new_left->ptr_arr[1]->leaf_arr[0]->getPerm();
                 // Making new right B Node
                 B_Node *new_right = new B_Node(original->ptr_arr[2]->leaf_arr[0]->getPerm());
                 new_right->ptr_arr[0] = original->ptr_arr[2];
                 new_right->ptr_arr[1] = original->ptr_arr[3];
-                new_right->value_arr[1] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
+                new_right->value_arr[0] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
 
                 /*************** FIX: Should not always make a new root.****************
                 If the parent of the full node has an avaiable spot, insert it there. */
