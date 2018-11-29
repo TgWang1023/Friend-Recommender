@@ -122,34 +122,52 @@ void B_Tree::addUser(User *user) {
         if(runner->leaf_arr[1] == NULL && runner->leaf_arr[0]->getPerm() < goal) { // If the leaf has a spot for the new user to the inserted
             runner->leaf_arr[1] = user; 
         } else { // If there are no spots available, check if the previous internal node has a open spot.
-            // If all pointers are full, split and insert     
-            std::cout << "no spot to insert" << std::endl;
-            B_Node *original = runner->parent;
-            while(runner->parent != NULL) {
-                runner = runner->parent;
+            bool noOpenSlot = true;
+            for(int i = runnerIdx + 1; i < 4; i++) {
+                if(runner->parent->ptr_arr[i] == NULL) {
+                    for(int j = i; j > runnerIdx; j--) {
+                        runner->parent->ptr_arr[j] = runner->parent->ptr_arr[j - 1];
+                        runner->parent->value_arr[j - 1] = runner->parent->ptr_arr[j]->leaf_arr[0]->getPerm();
+                    }
+                    runner->parent->ptr_arr[runnerIdx] = new B_Node(user);
+                    runner->parent->ptr_arr[runnerIdx]->parent = runner->parent;
+                    if(runnerIdx - 1 >= 0) {
+                        runner->parent->value_arr[runnerIdx - 1] = runner->parent->ptr_arr[runnerIdx]->leaf_arr[0]->getPerm();
+                    }
+                    noOpenSlot = false;
+                    break;
+                }
             }
-            // Making new left B Node
-            B_Node *new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
-            new_left->ptr_arr[0] = original->ptr_arr[0];
-            new_left->ptr_arr[1] = original->ptr_arr[1];
-            new_left->value_arr[0] = new_left->ptr_arr[1]->leaf_arr[0]->getPerm();
-            // Making new right B Node
-            B_Node *new_right = new B_Node(original->ptr_arr[2]->leaf_arr[0]->getPerm());
-            new_right->ptr_arr[0] = original->ptr_arr[2];
-            new_right->ptr_arr[1] = original->ptr_arr[3];
-            new_right->value_arr[0] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
+            // If all pointers are full, split and insert     
+            if(noOpenSlot) {
+                std::cout << "no spot to insert" << std::endl;
+                B_Node *original = runner->parent;
+                while(runner->parent != NULL) {
+                    runner = runner->parent;
+                }
+                // Making new left B Node
+                B_Node *new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
+                new_left->ptr_arr[0] = original->ptr_arr[0];
+                new_left->ptr_arr[1] = original->ptr_arr[1];
+                new_left->value_arr[0] = new_left->ptr_arr[1]->leaf_arr[0]->getPerm();
+                // Making new right B Node
+                B_Node *new_right = new B_Node(original->ptr_arr[2]->leaf_arr[0]->getPerm());
+                new_right->ptr_arr[0] = original->ptr_arr[2];
+                new_right->ptr_arr[1] = original->ptr_arr[3];
+                new_right->value_arr[0] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
 
-            /*************** FIX: Should not always make a new root.****************
-            If the parent of the full node has an avaiable spot, insert it there. */
+                /*************** FIX: Should not always make a new root.****************
+                If the parent of the full node has an avaiable spot, insert it there. */
 
-            // Making a new root and call function again to insert the new user
-            B_Node *new_root = new B_Node(original->value_arr[1]);
-            new_root->ptr_arr[0] = new_left;
-            new_root->ptr_arr[1] = new_right;
-            new_left->parent = new_root;
-            new_right->parent = new_root;
-            this->root = new_root;
-            addUser(user);
+                // Making a new root and call function again to insert the new user
+                B_Node *new_root = new B_Node(original->value_arr[1]);
+                new_root->ptr_arr[0] = new_left;
+                new_root->ptr_arr[1] = new_right;
+                new_left->parent = new_root;
+                new_right->parent = new_root;
+                this->root = new_root;
+                addUser(user);
+            }
         }
     }
 }
@@ -223,24 +241,7 @@ int B_Tree::findUserDetail(int perm) {
     return -1;
 }
 
-// ------------Backup code for finding empty slots in a leaf---------------
-/* bool noOpenSlot = true;
-// Check right side first
-for(int i = runnerIdx + 1; i < 4; i++) {
-    if(runner->parent->ptr_arr[i] == NULL) {
-        for(int j = i; j > runnerIdx; j--) {
-            runner->parent->ptr_arr[j] = runner->parent->ptr_arr[j - 1];
-            runner->parent->value_arr[j - 1] = runner->parent->ptr_arr[j]->leaf_arr[0]->getPerm();
-        }
-        runner->parent->ptr_arr[runnerIdx] = new B_Node(user);
-        runner->parent->ptr_arr[runnerIdx]->parent = runner->parent;
-        if(runnerIdx - 1 >= 0) {
-            runner->parent->value_arr[runnerIdx - 1] = runner->parent->ptr_arr[runnerIdx]->leaf_arr[0]->getPerm();
-        }
-        noOpenSlot = false;
-        break;
-    }
-}
+/* --------Backup code for checking the left side of a internal node
 // Check left side second
 if(noOpenSlot) {
     for(int i = runnerIdx - 1; i > -1; i--) {
@@ -258,4 +259,5 @@ if(noOpenSlot) {
             break;
         }
     }
-} */
+}
+*/
