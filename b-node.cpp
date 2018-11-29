@@ -22,6 +22,7 @@ B_Node::B_Node(int num) {
 
 B_Node::B_Node(User *user) {
     this->isLeaf = true;
+    this->parent = NULL;
     this->leaf_arr[0] = user;
     this->leaf_arr[1] = NULL;
 }
