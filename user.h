@@ -12,11 +12,14 @@ class User {
         std::string getName();
         std::string getGenre1();
         std::string getGenre2();
+        int getGraphIdx();
+        void setGraphIndex(int graph_idx);
     private: 
         int perm_number;
         std::string name;
         std::string genre1;
         std::string genre2;
+        int graph_idx;
 };
 
 #endif

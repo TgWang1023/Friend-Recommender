@@ -31,3 +31,11 @@ std::string User::getGenre2() {
     return this->genre2;
 }
 
+int User::getGraphIdx() {
+    return this->graph_idx;
+}
+
+void User::setGraphIndex(int graph_idx) {
+    this->graph_idx = graph_idx;
+}
+

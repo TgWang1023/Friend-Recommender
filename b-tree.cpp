@@ -264,13 +264,13 @@ int B_Tree::findUserDetail(int perm) {
         std::cout << "User's name: " << runner->leaf_arr[0]->getName() << std::endl;
         std::cout << "User's first favourite genre: " << runner->leaf_arr[0]->getGenre1() << std::endl;
         std::cout << "User's second favourite genre: " << runner->leaf_arr[0]->getGenre2() << std::endl;
-        return 9999; // STUB!!!!!!!!!!! Change to Graph Index once implemented
+        return runner->leaf_arr[0]->getGraphIdx();
     } else if(runner->leaf_arr[1] != NULL && runner->leaf_arr[1]->getPerm() == perm) {
         std::cout << "User's perm number: " << runner->leaf_arr[1]->getPerm() << std::endl;
         std::cout << "User's name: " << runner->leaf_arr[1]->getName() << std::endl;
         std::cout << "User's first favourite genre: " << runner->leaf_arr[1]->getGenre1() << std::endl;
         std::cout << "User's second favourite genre: " << runner->leaf_arr[1]->getGenre2() << std::endl;
-        return 9999; // STUB!!!!!!!!!!! Change to Graph Index once implemented
+        return runner->leaf_arr[0]->getGraphIdx();
     } else {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
     }
