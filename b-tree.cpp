@@ -71,7 +71,7 @@ void B_Tree::addUser(User *user) {
     } else { // If no new leaf node were created in the traversal process...
         if(runner->leaf_arr[1] == NULL) { // If the leaf has a spot for the new user to the inserted
             runner->leaf_arr[1] = user; 
-        } else if(runner->leaf_arr[1] != NULL && goal < runner->leaf_arr[1]->getPerm()) { // If the inserted value is bigger than the bottom leaf, insert the nee value instead and re-insert the previous bottom leaf
+        } else if(runner->leaf_arr[1] != NULL && goal < runner->leaf_arr[1]->getPerm() && goal > runner->leaf_arr[0]->getPerm()) { // If the inserted value is bigger than the bottom leaf, insert the nee value instead and re-insert the previous bottom leaf
             User* temp = runner->leaf_arr[1];
             runner->leaf_arr[1] = user;
             addUser(temp);
@@ -90,17 +90,22 @@ void B_Tree::addUser(User *user) {
                 return;
             }
             bool noOpenSlot = true;
-            runnerIdx += 1;
+            if(runnerIdx == 0 && goal < runner->leaf_arr[0]->getPerm()) {
+                runnerIdx = 0;
+            } else {
+                runnerIdx += 1;
+            }
             for(int i = runnerIdx + 1; i < 4; i++) {
-                if(runner->parent->ptr_arr[i] == NULL) {
+                if(prev_runner->ptr_arr[i] == NULL) {
+                    std::cout << "testing" << std::endl;
                     for(int j = i; j > runnerIdx; j--) {
-                        runner->parent->ptr_arr[j] = runner->parent->ptr_arr[j - 1];
-                        runner->parent->value_arr[j - 1] = runner->parent->ptr_arr[j]->leaf_arr[0]->getPerm();
+                        prev_runner->ptr_arr[j] = prev_runner->ptr_arr[j - 1];
+                        prev_runner->value_arr[j - 1] = prev_runner->ptr_arr[j]->leaf_arr[0]->getPerm();
                     }
-                    runner->parent->ptr_arr[runnerIdx] = new B_Node(user);
-                    runner->parent->ptr_arr[runnerIdx]->parent = runner->parent;
+                    prev_runner->ptr_arr[runnerIdx] = new B_Node(user);
+                    prev_runner->ptr_arr[runnerIdx]->parent = prev_runner;
                     if(runnerIdx - 1 >= 0) {
-                        runner->parent->value_arr[runnerIdx - 1] = runner->parent->ptr_arr[runnerIdx]->leaf_arr[0]->getPerm();
+                        prev_runner->value_arr[runnerIdx - 1] = prev_runner->ptr_arr[runnerIdx]->leaf_arr[0]->getPerm();
                     }
                     noOpenSlot = false;
                     break;
@@ -136,6 +141,7 @@ void B_Tree::addUser(User *user) {
                         new_right->parent = new_root;
                         this->root = new_root;
                         addUser(user);
+                        return;
                     } else {
                         prev_runner = prev_runner->parent;
                         runner = runner->parent;
@@ -185,6 +191,7 @@ void B_Tree::addUser(User *user) {
                                     prev_runner->ptr_arr[i]->ptr_arr[1]->parent = prev_runner->ptr_arr[i];
                                     prev_runner->value_arr[i - 1] = runner->value_arr[1];
                                     prev_runner->ptr_arr[i]->value_arr[0] = runner->value_arr[2];
+                                    runner->value_arr[1] = -1;
                                     runner->value_arr[2] = -1;
                                     runner->ptr_arr[2] = NULL;
                                     runner->ptr_arr[3] = NULL;
