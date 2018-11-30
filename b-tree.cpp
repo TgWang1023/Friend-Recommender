@@ -109,10 +109,7 @@ void B_Tree::addUser(User *user) {
             // If all pointers are full, split and insert     
             if(noOpenSlot) {
                 std::cout << "no spot to insert" << std::endl;
-                B_Node *original = runner->parent;
-                while(runner->parent != NULL) {
-                    runner = runner->parent;
-                }
+                B_Node *original = prev_runner;
                 // Making new left B Node
                 B_Node *new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
                 new_left->ptr_arr[0] = original->ptr_arr[0];
@@ -127,19 +124,46 @@ void B_Tree::addUser(User *user) {
                 new_right->ptr_arr[1] = original->ptr_arr[3];
                 new_right->ptr_arr[1]->parent = new_right;
                 new_right->value_arr[0] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
+                // Go upwards to make room for this new user
+                while(prev_runner != NULL) {
+                    if(prev_runner->parent == NULL) { // If there are no more internal node to insert this new element, make a new root and call function again to insert the new user
+                        B_Node *new_root = new B_Node(original->value_arr[1]);
+                        new_root->ptr_arr[0] = new_left;
+                        new_root->ptr_arr[1] = new_right;
+                        new_root->ptr_arr[2] = NULL;
+                        new_root->ptr_arr[3] = NULL;
+                        new_left->parent = new_root;
+                        new_right->parent = new_root;
+                        this->root = new_root;
+                        addUser(user);
+                    } else {
+                        prev_runner = prev_runner->parent;
+                        runner = runner->parent;
+                        if(goal < prev_runner->value_arr[0]) {
+                            
 
-                // If there are no more internal node to insert this new element, make a new root and call function again to insert the new user
-                if(prev_runner->parent == NULL) {
-                    B_Node *new_root = new B_Node(original->value_arr[1]);
-                    new_root->ptr_arr[0] = new_left;
-                    new_root->ptr_arr[1] = new_right;
-                    new_root->ptr_arr[2] = NULL;
-                    new_root->ptr_arr[3] = NULL;
-                    new_left->parent = new_root;
-                    new_right->parent = new_root;
-                    this->root = new_root;
-                    addUser(user);
-                }        
+                        } else {
+                            for(int i = 2; i < 4; i++) {
+                                if(prev_runner->ptr_arr[i] == NULL) {
+                                    runner = prev_runner->ptr_arr[i - 1];
+                                    prev_runner->ptr_arr[i] = new B_Node(runner->value_arr[2]);
+                                    prev_runner->ptr_arr[i]->parent = prev_runner;
+                                    prev_runner->ptr_arr[i]->ptr_arr[0] = runner->ptr_arr[2];
+                                    prev_runner->ptr_arr[i]->ptr_arr[0]->parent = prev_runner->ptr_arr[i];
+                                    prev_runner->ptr_arr[i]->ptr_arr[1] = runner->ptr_arr[3];
+                                    prev_runner->ptr_arr[i]->ptr_arr[1]->parent = prev_runner->ptr_arr[i];
+                                    prev_runner->value_arr[i - 1] = runner->value_arr[1];
+                                    prev_runner->ptr_arr[i]->value_arr[0] = runner->value_arr[2];
+                                    runner->value_arr[2] = -1;
+                                    runner->ptr_arr[2] = NULL;
+                                    runner->ptr_arr[3] = NULL;
+                                    addUser(user);
+                                    return;
+                                }
+                            }
+                        }
+                    }  
+                }     
             }
         }
     } 
