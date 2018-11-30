@@ -128,19 +128,18 @@ void B_Tree::addUser(User *user) {
                 new_right->ptr_arr[1]->parent = new_right;
                 new_right->value_arr[0] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
 
-                /*************** FIX: Should not always make a new root.****************
-                If the parent of the full node has an avaiable spot, insert it there. */
-
-                // Making a new root and call function again to insert the new user
-                B_Node *new_root = new B_Node(original->value_arr[1]);
-                new_root->ptr_arr[0] = new_left;
-                new_root->ptr_arr[1] = new_right;
-                new_root->ptr_arr[2] = NULL;
-                new_root->ptr_arr[3] = NULL;
-                new_left->parent = new_root;
-                new_right->parent = new_root;
-                this->root = new_root;
-                addUser(user);
+                // If there are no more internal node to insert this new element, make a new root and call function again to insert the new user
+                if(prev_runner->parent == NULL) {
+                    B_Node *new_root = new B_Node(original->value_arr[1]);
+                    new_root->ptr_arr[0] = new_left;
+                    new_root->ptr_arr[1] = new_right;
+                    new_root->ptr_arr[2] = NULL;
+                    new_root->ptr_arr[3] = NULL;
+                    new_left->parent = new_root;
+                    new_right->parent = new_root;
+                    this->root = new_root;
+                    addUser(user);
+                }        
             }
         }
     } 
