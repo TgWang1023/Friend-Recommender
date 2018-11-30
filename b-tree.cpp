@@ -114,25 +114,25 @@ void B_Tree::addUser(User *user) {
             // If all pointers are full, split and insert     
             if(noOpenSlot) {
                 std::cout << "no spot to insert" << std::endl;
-                B_Node *original = prev_runner;
-                // Making new left B Node
-                B_Node *new_left = new B_Node(original->ptr_arr[0]->leaf_arr[0]->getPerm());
-                new_left->ptr_arr[0] = original->ptr_arr[0];
-                new_left->ptr_arr[0]->parent = new_left;
-                new_left->ptr_arr[1] = original->ptr_arr[1];
-                new_left->ptr_arr[1]->parent = new_left;
-                new_left->value_arr[0] = new_left->ptr_arr[1]->leaf_arr[0]->getPerm();
-                // Making new right B Node
-                B_Node *new_right = new B_Node(original->ptr_arr[2]->leaf_arr[0]->getPerm());
-                new_right->ptr_arr[0] = original->ptr_arr[2];
-                new_right->ptr_arr[0]->parent = new_right;
-                new_right->ptr_arr[1] = original->ptr_arr[3];
-                new_right->ptr_arr[1]->parent = new_right;
-                new_right->value_arr[0] = new_right->ptr_arr[1]->leaf_arr[0]->getPerm();
                 // Go upwards to make room for this new user
                 while(prev_runner != NULL) {
                     if(prev_runner->parent == NULL) { // If there are no more internal node to insert this new element, make a new root and call function again to insert the new user
-                        B_Node *new_root = new B_Node(original->value_arr[1]);
+                        // Making new left B Node
+                        //B_Node *new_left = new B_Node(prev_runner->ptr_arr[0]->leaf_arr[0]->getPerm());
+                        B_Node *new_left = new B_Node(prev_runner->value_arr[0]);
+                        new_left->ptr_arr[0] = prev_runner->ptr_arr[0];
+                        new_left->ptr_arr[0]->parent = new_left;
+                        new_left->ptr_arr[1] = prev_runner->ptr_arr[1];
+                        new_left->ptr_arr[1]->parent = new_left;
+                        // Making new right B Node
+                        //B_Node *new_right = new B_Node(prev_runner->ptr_arr[2]->leaf_arr[0]->getPerm());
+                        B_Node *new_right = new B_Node(prev_runner->value_arr[2]);
+                        new_right->ptr_arr[0] = prev_runner->ptr_arr[2];
+                        new_right->ptr_arr[0]->parent = new_right;
+                        new_right->ptr_arr[1] = prev_runner->ptr_arr[3];
+                        new_right->ptr_arr[1]->parent = new_right;
+                        // Making a new root
+                        B_Node *new_root = new B_Node(prev_runner->value_arr[1]);
                         new_root->ptr_arr[0] = new_left;
                         new_root->ptr_arr[1] = new_right;
                         new_root->ptr_arr[2] = NULL;
