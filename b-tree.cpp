@@ -151,7 +151,7 @@ void B_Tree::addUser(User *user) {
                                 if(prev_runner->ptr_arr[i] == NULL) {
                                     foundSpot = true;
                                     for(int j = i; j > 0; j--) {
-                                        prev_runner->ptr_arr[i] = prev_runner->ptr_arr[i - 1];
+                                        prev_runner->ptr_arr[j] = prev_runner->ptr_arr[j - 1];
                                         if(j < 3) {
                                             prev_runner->value_arr[j] = prev_runner->value_arr[j - 1];
                                         }
