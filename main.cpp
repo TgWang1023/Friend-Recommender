@@ -1,5 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <algorithm>
+#include <random>
 #include "b-tree.h"
 #include "graph.h"
 
@@ -113,6 +116,23 @@ int main() {
                 cout << "Goodbye" << endl;
                 word_file.close();
                 exit(0);
+            }
+            case 't': {
+                int test_arr[100];
+                for(int i = 0; i < 100; i++) {
+                    test_arr[i] = i;
+                }
+                for(int i = 99; i >= 0; i--) {
+                    int j = rand() % (i + 1);
+                    swap(test_arr[i], test_arr[j]);
+                }
+                for(int i = 0; i < 100; i++) {
+                    cout << test_arr[i] << " ";
+                }
+                for(int i = 0; i < 100; i++) {
+                    tree.addUser(new User(test_arr[i], "a", "a", "a"));
+                }
+                cout << endl;
             }
             default:
                 cout << "Please enter 1, 2, 3, 4 or 5 to perform an action or 0 to quit" << endl;
