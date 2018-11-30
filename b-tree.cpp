@@ -140,8 +140,39 @@ void B_Tree::addUser(User *user) {
                         prev_runner = prev_runner->parent;
                         runner = runner->parent;
                         if(goal < prev_runner->value_arr[0]) {
-                            
-
+                            bool foundSpot = false;
+                            for(int i = 2; i < 4; i++) {
+                                if(prev_runner->ptr_arr[i] == NULL) {
+                                    foundSpot = true;
+                                    for(int j = i; j > 0; j--) {
+                                        prev_runner->ptr_arr[i] = prev_runner->ptr_arr[i - 1];
+                                        if(j < 3) {
+                                            prev_runner->value_arr[j] = prev_runner->value_arr[j - 1];
+                                        }
+                                    }  
+                                    runner = prev_runner->ptr_arr[1];
+                                    break; 
+                                }
+                            }
+                            if(foundSpot == true) {
+                                prev_runner->ptr_arr[0] = new B_Node(runner->value_arr[0]);
+                                prev_runner->ptr_arr[0]->parent = prev_runner;
+                                prev_runner->ptr_arr[0]->ptr_arr[0] = runner->ptr_arr[0];
+                                prev_runner->ptr_arr[0]->ptr_arr[0]->parent = prev_runner->ptr_arr[0];
+                                prev_runner->ptr_arr[0]->ptr_arr[1] = runner->ptr_arr[1];
+                                prev_runner->ptr_arr[0]->ptr_arr[1]->parent = prev_runner->ptr_arr[0];
+                                prev_runner->value_arr[0] = runner->value_arr[1];
+                                prev_runner->ptr_arr[0]->value_arr[0] = runner->value_arr[0];
+                                runner->ptr_arr[0] = runner->ptr_arr[2];
+                                runner->ptr_arr[1] = runner->ptr_arr[3];
+                                runner->value_arr[0] = runner->value_arr[2];
+                                runner->value_arr[1] = -1;
+                                runner->value_arr[2] = -1;
+                                runner->ptr_arr[2] = NULL;
+                                runner->ptr_arr[3] = NULL;
+                                addUser(user);
+                                return;
+                            }
                         } else {
                             for(int i = 2; i < 4; i++) {
                                 if(prev_runner->ptr_arr[i] == NULL) {
