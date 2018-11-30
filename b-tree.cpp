@@ -41,15 +41,19 @@ void B_Tree::addUser(User *user) {
     while(runner != NULL && runner->isLeaf == false) {
         std::cout << "Roadmaps: " << runner->value_arr[0] << ", " << runner->value_arr[1] << ", " << runner->value_arr[2] << std::endl;
         if(goal < runner->value_arr[0]) {
+            std::cout << "came to 0" << std::endl;
             runner = runner->ptr_arr[0];
             runnerIdx = 0;
-        } else if(runner->value_arr[1] == -1 || runner->value_arr[0] <= goal < runner->value_arr[1]) {
+        } else if(runner->value_arr[1] == -1 || (runner->value_arr[0] <= goal && goal < runner->value_arr[1])) {
+            std::cout << "came to 1" << std::endl;
             runner = runner->ptr_arr[1];
             runnerIdx = 1;
-        } else if(runner->value_arr[2] == -1 || runner->value_arr[1] <= goal < runner->value_arr[2]) {
+        } else if(runner->value_arr[2] == -1 || (runner->value_arr[1] <= goal && goal < runner->value_arr[2])) {
+            std::cout << "came to 2" << std::endl;
             runner = runner->ptr_arr[2];
             runnerIdx = 2;
         } else {
+            std::cout << "came to 3" << std::endl;
             runner = runner->ptr_arr[3];
             runnerIdx = 3;
         }
@@ -73,7 +77,20 @@ void B_Tree::addUser(User *user) {
             addUser(temp);
             return;
         } else { // If there are no spots available, check if the previous internal node has a open spot.
+            if(runnerIdx < 3 && prev_runner->ptr_arr[runnerIdx + 1] == NULL) {
+                std::cout << "wow!" << std::endl;
+                prev_runner->ptr_arr[runnerIdx + 1] = new B_Node(user);
+                prev_runner->ptr_arr[runnerIdx + 1]->parent = prev_runner;
+                prev_runner->value_arr[runnerIdx] = prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[0]->getPerm();
+                return;
+            } else if(runnerIdx < 3 && prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[1] == NULL) {
+                prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[1] = prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[0];
+                prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[0] = user;
+                prev_runner->value_arr[runnerIdx] = prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[0]->getPerm();
+                return;
+            }
             bool noOpenSlot = true;
+            runnerIdx += 1;
             for(int i = runnerIdx + 1; i < 4; i++) {
                 if(runner->parent->ptr_arr[i] == NULL) {
                     for(int j = i; j > runnerIdx; j--) {
@@ -140,9 +157,9 @@ void B_Tree::findUser(int perm) {
     while(runner != NULL && runner->isLeaf != true) {
         if(perm < runner->value_arr[0]) {
             runner = runner->ptr_arr[0];
-        } else if(runner->value_arr[1] == -1 || runner->value_arr[0] <= perm < runner->value_arr[1]) {
+        } else if(runner->value_arr[1] == -1 || (runner->value_arr[0] <= perm && perm < runner->value_arr[1])) {
             runner = runner->ptr_arr[1];
-        } else if(runner->value_arr[2] == -1 || runner->value_arr[1] <= perm < runner->value_arr[2]) {
+        } else if(runner->value_arr[2] == -1 || (runner->value_arr[1] <= perm && perm < runner->value_arr[2])) {
             runner = runner->ptr_arr[2];
         } else {
             runner = runner->ptr_arr[3];
@@ -167,12 +184,16 @@ int B_Tree::findUserDetail(int perm) {
     B_Node *runner = this->root;
     while(runner != NULL && runner->isLeaf != true) {
         if(perm < runner->value_arr[0]) {
+            std::cout << "came to 0" << std::endl;
             runner = runner->ptr_arr[0];
-        } else if(runner->value_arr[1] == -1 || runner->value_arr[0] <= perm < runner->value_arr[1]) {
+        } else if(runner->value_arr[1] == -1 || (runner->value_arr[0] <= perm && perm < runner->value_arr[1])) {
+            std::cout << "came to 1" << std::endl;
             runner = runner->ptr_arr[1];
-        } else if(runner->value_arr[2] == -1 || runner->value_arr[1] <= perm < runner->value_arr[2]) {
+        } else if(runner->value_arr[2] == -1 || (runner->value_arr[1] <= perm && perm < runner->value_arr[2])) {
+            std::cout << "came to 2" << std::endl;
             runner = runner->ptr_arr[2];
         } else {
+            std::cout << "came to 3" << std::endl;
             runner = runner->ptr_arr[3];
         }
     }
