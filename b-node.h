@@ -15,6 +15,8 @@ struct B_Node {
     B_Node *ptr_arr[4];
     bool isLeaf;
     User *leaf_arr[2];
+    static int curr_idx;
+    int graph_idx;
 };
 
 #endif

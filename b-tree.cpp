@@ -78,7 +78,6 @@ void B_Tree::addUser(User *user) {
             return;
         } else { // If there are no spots available, check if the previous internal node has a open spot.
             if(runnerIdx < 3 && prev_runner->ptr_arr[runnerIdx + 1] == NULL) {
-                std::cout << "wow!" << std::endl;
                 prev_runner->ptr_arr[runnerIdx + 1] = new B_Node(user);
                 prev_runner->ptr_arr[runnerIdx + 1]->parent = prev_runner;
                 prev_runner->value_arr[runnerIdx] = prev_runner->ptr_arr[runnerIdx + 1]->leaf_arr[0]->getPerm();
@@ -97,7 +96,6 @@ void B_Tree::addUser(User *user) {
             }
             for(int i = runnerIdx + 1; i < 4; i++) {
                 if(prev_runner->ptr_arr[i] == NULL) {
-                    std::cout << "testing" << std::endl;
                     for(int j = i; j > runnerIdx; j--) {
                         prev_runner->ptr_arr[j] = prev_runner->ptr_arr[j - 1];
                         prev_runner->value_arr[j - 1] = prev_runner->ptr_arr[j]->leaf_arr[0]->getPerm();
@@ -113,7 +111,6 @@ void B_Tree::addUser(User *user) {
             }
             // If all pointers are full, split and insert     
             if(noOpenSlot) {
-                std::cout << "no spot to insert" << std::endl;
                 // Go upwards to make room for this new user
                 while(prev_runner != NULL) {
                     if(prev_runner->parent == NULL) { // If there are no more internal node to insert this new element, make a new root and call function again to insert the new user
