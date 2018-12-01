@@ -189,8 +189,7 @@ int main() {
                     if (user != NULL) {
                         cout << "Here is the list of recommended friends: " << endl;
                         cout << "-------------------------" << endl;
-                        graph.traverse(stoi(perm_input), tree, user->getGenre1(), user->getGenre2(), stoi(perm_input));
-                        graph.reset();
+                        graph.traverse(stoi(perm_input), tree, user->getGenre1(), user->getGenre2());
                     }
                 } catch(invalid_argument i) {
                     cout << "ERROR: Failed to find user detail. Invalid perm number." << endl;
