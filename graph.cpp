@@ -23,7 +23,6 @@ void Graph::addFriend(int user_idx, int new_friend) {
 }
 
 void Graph::traverse(int perm, B_Tree &tree, std::string genre1, std::string genre2, int original) { // DFS
-    std::cout << "here?" << std::endl;
     User* user = tree.findUserDetailNoPrint(perm);
     int original_idx = tree.findUserDetailNoPrint(original)->getGraphIdx();
     if(user == NULL) {
