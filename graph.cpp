@@ -67,6 +67,11 @@ void Graph::reset() {
     //stack.clear();
 }
 
+void Graph::clear() {
+    this->adj_list.clear();
+    this->marker_rec.clear();
+}
+
 /************* Backup Code ***************
 void Graph::filterFriend(int perm, B_Tree &tree) {
     int user_idx = tree.findUserDetailNoPrint(perm)->getGraphIdx();

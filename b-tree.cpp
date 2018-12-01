@@ -306,6 +306,10 @@ User* B_Tree::findUserDetailNoPrint(int perm) {
     return NULL;
 }
 
+void B_Tree::clear() {
+    this->root = NULL;
+}
+
 /* --------Backup code for checking the left side of a internal node
 // Check left side second
 if(noOpenSlot) {

@@ -38,6 +38,8 @@ int main() {
                 word_file.open(filename);
                 if (word_file.is_open()) {
                     cout << "Successfully opened file." << endl;
+                    tree.clear();
+                    graph.clear();
                     string line;
                     string perm_input = "";
                     string name_input = "";
