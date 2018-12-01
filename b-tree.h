@@ -10,6 +10,7 @@ class B_Tree {
         void addUser(User *user);
         void findUser(int perm);
         User* findUserDetail(int perm);
+        User* findUserDetailNoPrint(int perm);
     private: 
         B_Node *root;
 };

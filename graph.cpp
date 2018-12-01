@@ -22,32 +22,34 @@ void Graph::addFriend(int user_idx, int new_friend) {
     this->adj_list.at(user_idx).push_back(new_friend);
 }
 
-void Graph::traverse(int perm, B_Tree &tree, std::string genre1, std::string genre2) { // DFS
-    User* user = tree.findUserDetail(perm);
+void Graph::traverse(int perm, B_Tree &tree, std::string genre1, std::string genre2, int original) { // DFS
+    std::cout << "here?" << std::endl;
+    User* user = tree.findUserDetailNoPrint(perm);
+    int original_idx = tree.findUserDetailNoPrint(original)->getGraphIdx();
     if(user == NULL) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
         return;
     } else {
         int idx = user->getGraphIdx();
+        marker_rec[idx] = true;
         for(int i = 1; i < this->adj_list.at(idx).size(); i++) {
-            if(marker_rec.at(idx) == false) {
-                marker_rec[idx] = true;
-                //stack.push_back(idx);
-                if(user->getGenre1() == genre1 || user->getGenre1() == genre2 || user->getGenre2() == genre1 || user->getGenre2() == genre2) {
-                    std::cout << "<" << user->getPerm() << ", " << user->getName() << ", " << user->getGenre1() << ", " << user->getGenre2() << ">" << std::endl;
+            int checking = tree.findUserDetailNoPrint(this->adj_list.at(idx).at(i))->getGraphIdx();
+            if(marker_rec.at(checking) == false) {
+                bool notFriend = true;
+                for(int j = 0; j < this->adj_list.at(original_idx).size(); j++) {
+                    if(user->getPerm() == this->adj_list.at(original_idx).at(j)) {
+                        notFriend = false;
+                        break;
+                    }
                 }
-                traverse(this->adj_list.at(idx).at(i), tree, genre1, genre2);
+                if((user->getGenre1() == genre1 || user->getGenre1() == genre2 || user->getGenre2() == genre1 || user->getGenre2() == genre2) && notFriend) {
+                    std::cout << "<" << user->getPerm() << ", " << user->getName() << ", " << user->getGenre1() << ", " << user->getGenre2() << ">" << std::endl;
+                } 
+                traverse(this->adj_list.at(idx).at(i), tree, genre1, genre2, original);
             }
         }
         //stack.pop_back();
         return;
-    }
-}
-
-void Graph::filterFriend(int perm, B_Tree &tree) {
-    int user_idx = tree.findUserDetail(perm)->getGraphIdx();
-    for(int i = 0; i <this->adj_list.at(user_idx).size(); i++) {
-        marker_rec[tree.findUserDetail(this->adj_list.at(user_idx).at(i))->getGraphIdx()] = true;
     }
 }
 
@@ -65,3 +67,12 @@ void Graph::reset() {
     }
     //stack.clear();
 }
+
+/************* Backup Code ***************
+void Graph::filterFriend(int perm, B_Tree &tree) {
+    int user_idx = tree.findUserDetailNoPrint(perm)->getGraphIdx();
+    for(int i = 0; i < this->adj_list.at(user_idx).size(); i++) {
+        marker_rec[tree.findUserDetailNoPrint(this->adj_list.at(user_idx).at(i))->getGraphIdx()] = true;
+    }
+}
+*/

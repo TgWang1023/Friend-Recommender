@@ -277,6 +277,35 @@ User* B_Tree::findUserDetail(int perm) {
     return NULL;
 }
 
+User* B_Tree::findUserDetailNoPrint(int perm) {
+    // Empty tree case
+    if(this->root == NULL) {
+        return NULL;
+    }
+    // Traverse to the leaf based on the user's perm number
+    B_Node *runner = this->root;
+    while(runner != NULL && runner->isLeaf != true) {
+        if(perm < runner->value_arr[0]) {
+            runner = runner->ptr_arr[0];
+        } else if(runner->value_arr[1] == -1 || (runner->value_arr[0] <= perm && perm < runner->value_arr[1])) {
+            runner = runner->ptr_arr[1];
+        } else if(runner->value_arr[2] == -1 || (runner->value_arr[1] <= perm && perm < runner->value_arr[2])) {
+            runner = runner->ptr_arr[2];
+        } else {
+            runner = runner->ptr_arr[3];
+        }
+    }
+    // Return the graph index if found, -1 otherwise
+    if(runner == NULL || (runner->leaf_arr[0]->getPerm() != perm && runner->leaf_arr[1] == NULL)) {
+        return NULL;
+    } else if(runner->leaf_arr[0] != NULL && runner->leaf_arr[0]->getPerm() == perm) {
+        return runner->leaf_arr[0];
+    } else if(runner->leaf_arr[1] != NULL && runner->leaf_arr[1]->getPerm() == perm) {
+        return runner->leaf_arr[1];
+    } 
+    return NULL;
+}
+
 /* --------Backup code for checking the left side of a internal node
 // Check left side second
 if(noOpenSlot) {

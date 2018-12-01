@@ -136,10 +136,11 @@ int main() {
                 cout << "Please enter the user's perm number: ";
                 getline(cin, perm_input);
                 try {
-                    User* user = tree.findUserDetail(stoi(perm_input));
+                    User* user = tree.findUserDetailNoPrint(stoi(perm_input));
                     if (user != NULL) {
-                        graph.filterFriend(stoi(perm_input), tree);
-                        graph.traverse(stoi(perm_input), tree, user->getGenre1(), user->getGenre2());
+                        cout << "Here is the list of recommended friends: " << endl;
+                        cout << "-------------------------------------------" << endl;
+                        graph.traverse(stoi(perm_input), tree, user->getGenre1(), user->getGenre2(), stoi(perm_input));
                         graph.reset();
                     }
                 } catch(invalid_argument i) {

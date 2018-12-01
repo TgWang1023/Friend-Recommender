@@ -10,8 +10,8 @@ class Graph {
         ~Graph();
         int addUser(int user);
         void addFriend(int user_idx, int new_friend);
-        void traverse(int perm, B_Tree &tree, std::string genre1, std::string genre2);
-        void filterFriend(int user_idx, B_Tree &tree);
+        void traverse(int perm, B_Tree &tree, std::string genre1, std::string genre2, int original);
+        // void filterFriend(int user_idx, B_Tree &tree);
         void printFriend(int user_idx);
         void reset();
     private: 
