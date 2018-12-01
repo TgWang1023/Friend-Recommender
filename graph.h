@@ -8,8 +8,10 @@ class Graph {
         Graph();
         ~Graph();
         int addUser(int user);
-        void addFriend(int user, int new_friend);
+        int getCurrIdx();
+        void addFriend(int user_idx, int new_friend);
         void traverse();
+        void printFriend(int user_idx);
     private: 
         std::vector< std::vector<int> > adj_list;
 };

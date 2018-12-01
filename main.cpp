@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <algorithm>
 #include <random>
+#include <sstream>
 #include "b-tree.h"
 #include "graph.h"
 
@@ -11,6 +11,7 @@ using namespace std;
 int main() {
     fstream word_file;
     B_Tree tree;
+    Graph graph;
     cout << "\n\n\nFriend Recommender" << endl;
     cout << "Please select the action you would like to perform:" << endl;
 
@@ -48,6 +49,7 @@ int main() {
                 string name_input;
                 string genre1_input;
                 string genre2_input;
+                string friends_input;
                 // Getting user input
                 cout << "Please enter the user's perm number: ";
                 getline(cin, perm_input);
@@ -72,8 +74,25 @@ int main() {
                 getline(cin, genre1_input);
                 cout << "Please enter the user's second favourite movie genre: ";
                 getline(cin, genre2_input);
-                // Adding the new user to the tree
+                cout << "Please enter the user's list of friends by using their perm numbers, separated by spaces: ";
+                getline(cin, friends_input);
+                // Adding the new user to the graph
                 User *new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
+                graph.addUser(stoi(perm_input));
+                new_user->setGraphIndex(graph.getCurrIdx());
+                // Parsing the friends perm from string into integers
+                stringstream ss;
+                ss << friends_input;
+                string temp;
+                int found;
+                while(!ss.eof()) {
+                    ss >> temp;
+                    if(stringstream(temp) >> found) {
+                        graph.addFriend(new_user->getGraphIdx(), found);
+                    }
+                    temp = "";
+                }
+                // Adding the new user to the tree
                 tree.addUser(new_user);
                 cout << "User added successfully." << endl;
                 break;
@@ -117,7 +136,7 @@ int main() {
                 word_file.close();
                 exit(0);
             }
-            case 't': {
+            case 't': { // B Tree test function
                 int test_arr[100];
                 for(int i = 0; i < 100; i++) {
                     test_arr[i] = i;
@@ -133,6 +152,13 @@ int main() {
                     tree.addUser(new User(test_arr[i], "a", "a", "a"));
                 }
                 cout << endl;
+            }
+            case 'g': { // Graph test function
+                int idx;
+                cout << "Enter the graph index: ";
+                cin >> idx;
+                cin.ignore();
+                graph.printFriend(idx);
             }
             default:
                 cout << "Please enter 1, 2, 3, 4 or 5 to perform an action or 0 to quit" << endl;
