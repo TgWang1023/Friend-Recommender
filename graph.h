@@ -8,7 +8,6 @@ class Graph {
         Graph();
         ~Graph();
         int addUser(int user);
-        int getCurrIdx();
         void addFriend(int user_idx, int new_friend);
         void traverse();
         void printFriend(int user_idx);

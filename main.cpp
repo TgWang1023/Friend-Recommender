@@ -78,8 +78,7 @@ int main() {
                 getline(cin, friends_input);
                 // Adding the new user to the graph
                 User *new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
-                graph.addUser(stoi(perm_input));
-                new_user->setGraphIndex(graph.getCurrIdx());
+                new_user->setGraphIndex(graph.addUser(stoi(perm_input)));
                 // Parsing the friends perm from string into integers
                 stringstream ss;
                 ss << friends_input;
@@ -119,7 +118,10 @@ int main() {
                 cout << "Please enter the user's perm number: ";
                 getline(cin, perm_input);
                 try {
-                    tree.findUserDetail(stoi(perm_input));
+                    int idx = tree.findUserDetail(stoi(perm_input));
+                    if (idx != -1) {
+                        graph.printFriend(idx);
+                    }
                 } catch(invalid_argument i) {
                     cout << "ERROR: Failed to find user detail. Invalid perm number." << endl;
                 } catch(out_of_range o) {
