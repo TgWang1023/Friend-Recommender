@@ -118,9 +118,9 @@ int main() {
                 cout << "Please enter the user's perm number: ";
                 getline(cin, perm_input);
                 try {
-                    int idx = tree.findUserDetail(stoi(perm_input));
-                    if (idx != -1) {
-                        graph.printFriend(idx);
+                    User* user = tree.findUserDetail(stoi(perm_input));
+                    if (user != NULL) {
+                        graph.printFriend(user->getGraphIdx());
                     }
                 } catch(invalid_argument i) {
                     cout << "ERROR: Failed to find user detail. Invalid perm number." << endl;
@@ -130,7 +130,23 @@ int main() {
                 break;
             }
             case '5': {
-                cout << "case 5" << endl;
+                // Entered Attributes
+                string perm_input;
+                // Getting user input
+                cout << "Please enter the user's perm number: ";
+                getline(cin, perm_input);
+                try {
+                    User* user = tree.findUserDetail(stoi(perm_input));
+                    if (user != NULL) {
+                        graph.filterFriend(stoi(perm_input), tree);
+                        graph.traverse(stoi(perm_input), tree, user->getGenre1(), user->getGenre2());
+                        graph.reset();
+                    }
+                } catch(invalid_argument i) {
+                    cout << "ERROR: Failed to find user detail. Invalid perm number." << endl;
+                } catch(out_of_range o) {
+                    cout << "ERROR: Failed to find user detail. Perm number too large." << endl;
+                }
                 break;
             }
             case '0': {

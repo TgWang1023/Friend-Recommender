@@ -9,7 +9,7 @@ class B_Tree {
         ~B_Tree();
         void addUser(User *user);
         void findUser(int perm);
-        int findUserDetail(int perm);
+        User* findUserDetail(int perm);
     private: 
         B_Node *root;
 };

@@ -232,11 +232,11 @@ void B_Tree::findUser(int perm) {
     return;
 }
 
-int B_Tree::findUserDetail(int perm) {
+User* B_Tree::findUserDetail(int perm) {
     // Empty tree case
     if(this->root == NULL) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
-        return -1;
+        return NULL;
     }
     // Traverse to the leaf based on the user's perm number
     B_Node *runner = this->root;
@@ -258,23 +258,23 @@ int B_Tree::findUserDetail(int perm) {
     // Return the graph index if found, -1 otherwise
     if(runner == NULL || (runner->leaf_arr[0]->getPerm() != perm && runner->leaf_arr[1] == NULL)) {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
-        return -1;
+        return NULL;
     } else if(runner->leaf_arr[0] != NULL && runner->leaf_arr[0]->getPerm() == perm) {
         std::cout << "User's perm number: " << runner->leaf_arr[0]->getPerm() << std::endl;
         std::cout << "User's name: " << runner->leaf_arr[0]->getName() << std::endl;
         std::cout << "User's first favourite genre: " << runner->leaf_arr[0]->getGenre1() << std::endl;
         std::cout << "User's second favourite genre: " << runner->leaf_arr[0]->getGenre2() << std::endl;
-        return runner->leaf_arr[0]->getGraphIdx();
+        return runner->leaf_arr[0];
     } else if(runner->leaf_arr[1] != NULL && runner->leaf_arr[1]->getPerm() == perm) {
         std::cout << "User's perm number: " << runner->leaf_arr[1]->getPerm() << std::endl;
         std::cout << "User's name: " << runner->leaf_arr[1]->getName() << std::endl;
         std::cout << "User's first favourite genre: " << runner->leaf_arr[1]->getGenre1() << std::endl;
         std::cout << "User's second favourite genre: " << runner->leaf_arr[1]->getGenre2() << std::endl;
-        return runner->leaf_arr[1]->getGraphIdx();
+        return runner->leaf_arr[1];
     } else {
         std::cout << "No user with the perm number " << perm << " was found." << std::endl;
     }
-    return -1;
+    return NULL;
 }
 
 /* --------Backup code for checking the left side of a internal node
