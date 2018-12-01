@@ -11,6 +11,7 @@ class B_Tree {
         void findUser(int perm);
         User* findUserDetail(int perm);
         User* findUserDetailNoPrint(int perm);
+        void clear();
     private: 
         B_Node *root;
 };

@@ -38,6 +38,53 @@ int main() {
                 word_file.open(filename);
                 if (word_file.is_open()) {
                     cout << "Successfully opened file." << endl;
+                    string line;
+                    string perm_input = "";
+                    string name_input = "";
+                    string genre1_input = "";
+                    string genre2_input = "";
+                    string friends_perm_input = "";
+                    User *new_user;
+                    int phase = 0;
+                    while(getline(word_file, line)) {
+                        for(int i = 0; i < line.length(); i++) {
+                            if(line[i] == ';') {
+                                if(phase < 4) {
+                                    phase++;
+                                    if(phase == 4) {
+                                        new_user = new User(stoi(perm_input), name_input, genre1_input, genre2_input);
+                                        new_user->setGraphIndex(graph.addUser(stoi(perm_input)));
+                                    }
+                                } else {
+                                    graph.addFriend(new_user->getGraphIdx(), stoi(friends_perm_input));
+                                    // cout << friends_perm_input << " ";
+                                    friends_perm_input = "";
+                                }
+                            } else {
+                                if(phase == 0) {
+                                    perm_input += line[i];
+                                } else if(phase == 1) {
+                                    name_input += line[i];
+                                } else if(phase == 2) {
+                                    genre1_input += line[i];
+                                } else if(phase == 3) {
+                                    genre2_input += line[i];
+                                } else {
+                                    friends_perm_input += line[i];
+                                }
+                            }
+                        }
+                        graph.addFriend(new_user->getGraphIdx(), stoi(friends_perm_input));
+                        tree.addUser(new_user);
+                        // cout << friends_perm_input << " ";
+                        // cout << "Added: Perm - " << perm_input << ", Name - " << name_input << ", Genre1 - " << genre1_input << ", Genre2 - " << genre2_input << endl;
+                        perm_input = "";
+                        name_input = "";
+                        genre1_input = "";
+                        genre2_input = "";
+                        friends_perm_input = "";
+                        phase = 0;
+                    }
                 } else {
                     cout << "Unable to open this file." << endl;
                 }
@@ -139,7 +186,7 @@ int main() {
                     User* user = tree.findUserDetailNoPrint(stoi(perm_input));
                     if (user != NULL) {
                         cout << "Here is the list of recommended friends: " << endl;
-                        cout << "-------------------------------------------" << endl;
+                        cout << "-------------------------" << endl;
                         graph.traverse(stoi(perm_input), tree, user->getGenre1(), user->getGenre2(), stoi(perm_input));
                         graph.reset();
                     }
@@ -155,33 +202,36 @@ int main() {
                 word_file.close();
                 exit(0);
             }
-            case 't': { // B Tree test function
-                int test_arr[100];
-                for(int i = 0; i < 100; i++) {
-                    test_arr[i] = i;
-                }
-                for(int i = 99; i >= 0; i--) {
-                    int j = rand() % (i + 1);
-                    swap(test_arr[i], test_arr[j]);
-                }
-                for(int i = 0; i < 100; i++) {
-                    cout << test_arr[i] << " ";
-                }
-                for(int i = 0; i < 100; i++) {
-                    tree.addUser(new User(test_arr[i], "a", "a", "a"));
-                }
-                cout << endl;
-            }
-            case 'g': { // Graph test function
-                int idx;
-                cout << "Enter the graph index: ";
-                cin >> idx;
-                cin.ignore();
-                graph.printFriend(idx);
-            }
             default:
                 cout << "Please enter 1, 2, 3, 4 or 5 to perform an action or 0 to quit" << endl;
         }
     }
     return 0;
 }
+
+/********* Backup code for testing *********
+case 't': { // B Tree test function
+    int test_arr[100];
+    for(int i = 0; i < 100; i++) {
+        test_arr[i] = i;
+    }
+    for(int i = 99; i >= 0; i--) {
+        int j = rand() % (i + 1);
+        swap(test_arr[i], test_arr[j]);
+    }
+    for(int i = 0; i < 100; i++) {
+        cout << test_arr[i] << " ";
+    }
+    for(int i = 0; i < 100; i++) {
+        tree.addUser(new User(test_arr[i], "a", "a", "a"));
+    }
+    cout << endl;
+}
+case 'g': { // Graph test function
+    int idx;
+    cout << "Enter the graph index: ";
+    cin >> idx;
+    cin.ignore();
+    graph.printFriend(idx);
+}
+*/

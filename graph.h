@@ -14,6 +14,7 @@ class Graph {
         // void filterFriend(int user_idx, B_Tree &tree);
         void printFriend(int user_idx);
         void reset();
+        void clear();
     private: 
         std::vector< std::vector<int> > adj_list;
         std::vector<bool> marker_rec;
