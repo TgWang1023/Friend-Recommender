@@ -28,7 +28,7 @@ void Graph::traverse(int perm, B_Tree &tree, std::string genre1, std::string gen
         visited[i] = false; 
     }
     User *originalUser = tree.findUserDetailNoPrint(perm);
-    if(originalUser) {
+    if(originalUser != NULL) {
         traverseHelper(perm, tree, genre1, genre2, visited, originalUser->getGraphIdx()); 
     }
 }

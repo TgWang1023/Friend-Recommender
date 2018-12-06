@@ -136,7 +136,11 @@ int main() {
                 while(!ss.eof()) {
                     ss >> temp;
                     if(stringstream(temp) >> found) {
-                        graph.addFriend(new_user->getGraphIdx(), found);
+                        User *reverse = tree.findUserDetailNoPrint(found);
+                        if(reverse != NULL) {
+                            graph.addFriend(new_user->getGraphIdx(), found);
+                            graph.addFriend(reverse->getGraphIdx(), stoi(perm_input));
+                        }
                     }
                     temp = "";
                 }
