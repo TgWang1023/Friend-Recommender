@@ -49,10 +49,12 @@ void Graph::traverseHelper(int perm, B_Tree &tree, std::string genre1, std::stri
     } 
 
     for (int i = 0; i < this->adj_list[user_idx].size(); ++i) {
-        if (!visited[tree.findUserDetailNoPrint(this->adj_list[user_idx].at(i))->getGraphIdx()]) {
+        User *temp = tree.findUserDetailNoPrint(this->adj_list[user_idx].at(i));
+        if (temp != NULL && !visited[tree.findUserDetailNoPrint(this->adj_list[user_idx].at(i))->getGraphIdx()]) {
             traverseHelper(this->adj_list[user_idx].at(i), tree, genre1, genre2, visited, original_idx); 
         }
     }
+    
 }
 
 void Graph::printFriend(int user_idx) {
